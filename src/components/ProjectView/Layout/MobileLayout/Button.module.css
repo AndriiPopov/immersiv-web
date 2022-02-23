@@ -1,0 +1,12 @@
+.button {
+    color: white;
+}
+.wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wrap:active {
+    background-color: rgba(0, 0, 0, 0.5);
+}

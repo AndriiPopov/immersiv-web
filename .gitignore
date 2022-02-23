@@ -1,0 +1,8 @@
+.env
+node_modules
+.vscode
+.package-lock
+request.http
+*.rest
+build
+src/.env
