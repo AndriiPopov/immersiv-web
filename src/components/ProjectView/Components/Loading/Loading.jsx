@@ -12,7 +12,7 @@ export const Loading = (props) => {
             />
             <div className={styles.center}>
                 <div className={styles.video}>
-                    <video autoPlay loop muted>
+                    <video autoPlay loop muted style={{ objectFit: "contain" }}>
                         <source
                             src={"/videos/Immersiv-logo.mp4"}
                             type="video/mp4"

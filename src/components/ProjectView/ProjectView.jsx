@@ -14,7 +14,7 @@ import { Loading } from "./Components/Loading/Loading";
 const ProjectView = (props) => {
     const { project, constant } = props;
     const [width, height] = useWindowSize();
-    const isMobile = isMobileAgent || width < 1000 || height < 600;
+    const isMobile = isMobileAgent || width < 1200 || height < 700;
     const [loaded, setLoaded] = useState(false);
 
     //Add google analytic

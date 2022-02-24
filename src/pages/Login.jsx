@@ -51,7 +51,7 @@ const Login = () => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <h1 className="text-center text-4xl my-4">
-                        Continue Shopping
+                        Manage projects
                     </h1>
                     <div className="">
                         <Label className="block text-grey-darker text-sm font-bold mb-2">
@@ -95,6 +95,7 @@ const Login = () => {
                             Password required
                         </HelperText>
                     )}
+
                     {error && (
                         <HelperText className="mt-1 italic" valid={false}>
                             {error}

@@ -19,6 +19,7 @@ const Admin = () => {
         });
         constantService.getConstant().then((response) => {
             if (response.data.length) setConstant(response.data[0]);
+            else setConstant({});
         });
     }, []);
     return (

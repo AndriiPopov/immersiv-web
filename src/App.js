@@ -38,14 +38,10 @@ function App() {
                         <Route path="/reset-password">
                             <ResetPassword />
                         </Route>
-                        <Route exact path="/:id/">
+                        <Route exact path="/p/:id">
                             <Project />
                         </Route>
-                        {/* 
-                        
-                        <Route exact path="/preview/:id/">
-                            <Preview />
-                        </Route> */}
+
                         <Route path="*">
                             <h1>404 Error Found</h1>
                         </Route>

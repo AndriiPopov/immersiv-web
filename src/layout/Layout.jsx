@@ -2,7 +2,7 @@ import Spinner from "components/Spinner";
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-const Layout = ({ children, title, loading, description }) => {
+const Layout = ({ children, title, loading, description, isProject }) => {
     return (
         <>
             <Helmet>
@@ -54,7 +54,9 @@ const Layout = ({ children, title, loading, description }) => {
                     <Spinner size={100} loading />
                 </>
             ) : (
-                <div style={{ flex: 1, display: "flex" }}>{children}</div>
+                <div style={{ flex: 1, display: isProject ? "flex" : "block" }}>
+                    {children}
+                </div>
             )}
         </>
     );

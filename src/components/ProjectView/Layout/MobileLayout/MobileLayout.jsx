@@ -7,7 +7,7 @@ import styles from "./MobileLayout.module.css";
 export const MobileLayout = (props) => {
     const { project, constant } = props;
     return (
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, display: "flex" }}>
             <StreamViewWrapper setLoaded={props.setLoaded} project={project} />
             {props.loaded && (
                 <img

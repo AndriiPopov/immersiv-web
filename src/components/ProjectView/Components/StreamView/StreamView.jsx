@@ -266,7 +266,7 @@ const StreamView = (props) => {
                 StreamerStatus={streamerStatus}
                 LaunchRequestStatus={status}
                 InputEmitter={emitter}
-                UseNativeTouchEvents={project.UseNativeTouchEvents}
+                UseNativeTouchEvents={true}
                 UsePointerLock={project.UsePointerLock}
                 PointerLockRelease={project.PointerLockRelease}
                 setLoaded={props.setLoaded}

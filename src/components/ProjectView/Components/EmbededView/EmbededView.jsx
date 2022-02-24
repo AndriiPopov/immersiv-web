@@ -1,5 +1,5 @@
 import { IdleTimeout, VideoStream } from "@pureweb/platform-sdk-react";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { LoadingView } from "../LoadingView/LoadingView";
 
 export const EmbeddedView = (props) => {
@@ -9,6 +9,32 @@ export const EmbeddedView = (props) => {
     // const isIPhone =
     //     System.Browser().os === "iOS" &&
     //     !window.navigator.userAgent.includes("iPad");
+
+    useEffect(() => {
+        const updateVideoScale = () => {
+            const box = videoRef.current;
+            if (box) {
+                const width = box.offsetWidth;
+                const height = box?.offsetHeight;
+                const presetRatio = 4 / 3;
+                const actualRatio = width / height;
+                if (actualRatio > presetRatio) {
+                    box.style.transform = `scale(${
+                        actualRatio / presetRatio
+                    }, 1)`;
+                } else {
+                    box.style.transform = `scale(1, ${
+                        presetRatio / actualRatio
+                    })`;
+                }
+            }
+        };
+
+        updateVideoScale();
+
+        window.addEventListener("resize", updateVideoScale);
+        return () => window.removeEventListener("resize", updateVideoScale);
+    }, []);
     return (
         <div style={{ flex: 1, position: "relative" }}>
             {/* <FullScreen handle={handle}> */}
@@ -29,7 +55,7 @@ export const EmbeddedView = (props) => {
                 VideoRef={videoRef}
                 Emitter={props.InputEmitter}
                 Stream={props.VideoStream}
-                UseNativeTouchEvents={props.UseNativeTouchEvents}
+                UseNativeTouchEvents={true}
                 UsePointerLock={props.UsePointerLock}
                 PointerLockRelease={props.PointerLockRelease}
             />

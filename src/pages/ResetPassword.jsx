@@ -96,6 +96,9 @@ const ResetPassword = () => {
                                             {resetmsg.message}
                                         </HelperText>
                                     )}
+                                <HelperText className="mt-1 italic" valid>
+                                    Password must be greater than 5 characters
+                                </HelperText>
                             </Label>
                             <Label className="mb-4">
                                 <span className="block text-gray-700 text-sm font-bold mb-2">

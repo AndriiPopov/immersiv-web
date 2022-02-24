@@ -29,7 +29,7 @@ const Project = (props) => {
         });
     }, [id, featured]);
     return (
-        <Layout loading={!projectData}>
+        <Layout loading={!projectData} isProject>
             <ProjectView project={projectData} constant={constant} />
         </Layout>
     );

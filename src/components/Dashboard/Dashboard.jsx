@@ -76,7 +76,7 @@ const mdTheme = createTheme();
 const Dashboard = (props) => {
     const { data } = props;
     const { logout } = useUser();
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const [menuTab, setMenuTab] = useState("project");
     const toggleDrawer = () => {
         setOpen(!open);
