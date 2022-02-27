@@ -49,11 +49,12 @@ const Layout = ({ children, title, loading, description, isProject }) => {
                 /> */}
             </Helmet>
 
-            {loading ? (
-                <>
-                    <Spinner size={100} loading />
-                </>
-            ) : (
+            {loading ? null : (
+                // (
+                //     <>
+                //         <Spinner size={100} loading />
+                //     </>
+                // )
                 <div style={{ flex: 1, display: isProject ? "flex" : "block" }}>
                     {children}
                 </div>

@@ -17,10 +17,16 @@ const Admin = () => {
         adminService.getAdmin().then((response) => {
             setAdmins(response.data);
         });
-        constantService.getConstant().then((response) => {
-            if (response.data.length) setConstant(response.data[0]);
-            else setConstant({});
-        });
+
+        constantService
+            .getConstant()
+            .then((response) => {
+                if (response.data) setConstant(response.data);
+                else setConstant({});
+            })
+            .catch(() => {
+                setConstant({});
+            });
     }, []);
     return (
         <Layout loading={!constant || !admins || !projects}>

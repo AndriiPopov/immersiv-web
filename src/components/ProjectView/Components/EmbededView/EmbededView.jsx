@@ -1,14 +1,20 @@
-import { IdleTimeout, VideoStream } from "@pureweb/platform-sdk-react";
+import { IdleTimeout, VideoStream, System } from "@pureweb/platform-sdk-react";
 import React, { useEffect, useRef } from "react";
 import { LoadingView } from "../LoadingView/LoadingView";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+
+import { StreamerStatus } from "@pureweb/platform-sdk";
+import styles from "./EmbededView.module.css";
+import { Button } from "antd";
+import { ExpandOutlined } from "@ant-design/icons";
 
 export const EmbeddedView = (props) => {
     const videoRef = useRef(null);
-    // const handle = useFullScreenHandle();
+    const handle = useFullScreenHandle();
     // Fullscreen API presently supported on iPad, but not iPhone or iPod
-    // const isIPhone =
-    //     System.Browser().os === "iOS" &&
-    //     !window.navigator.userAgent.includes("iPad");
+    const isIPhone =
+        System.Browser().os === "iOS" &&
+        !window.navigator.userAgent.includes("iPad");
 
     useEffect(() => {
         const updateVideoScale = () => {
@@ -16,7 +22,7 @@ export const EmbeddedView = (props) => {
             if (box) {
                 const width = box.offsetWidth;
                 const height = box?.offsetHeight;
-                const presetRatio = 4 / 3;
+                const presetRatio = 16 / 9;
                 const actualRatio = width / height;
                 if (actualRatio > presetRatio) {
                     box.style.transform = `scale(${
@@ -37,56 +43,50 @@ export const EmbeddedView = (props) => {
     }, []);
     return (
         <div style={{ flex: 1, position: "relative" }}>
-            {/* <FullScreen handle={handle}> */}
-            <IdleTimeout
-                Status={props.StreamerStatus}
-                WarningThreshold={300}
-                ExitThreshold={120}
-                // WarningCallback={handle.exit}
-                ExitCallback={() => window.location.reload()} // TODO: How to 'close' a contribution?
-            />
+            <FullScreen handle={handle} className={styles.fullscreen}>
+                <IdleTimeout
+                    Status={props.StreamerStatus}
+                    WarningThreshold={300}
+                    ExitThreshold={120}
+                    WarningCallback={handle.exit}
+                    ExitCallback={() => window.location.reload()} // TODO: How to 'close' a contribution?
+                />
 
-            <LoadingView
-                LaunchRequestStatus={props.LaunchRequestStatus}
-                StreamerStatus={props.StreamerStatus}
-                setLoaded={props.setLoaded}
-            />
-            <VideoStream
-                VideoRef={videoRef}
-                Emitter={props.InputEmitter}
-                Stream={props.VideoStream}
-                UseNativeTouchEvents={true}
-                UsePointerLock={props.UsePointerLock}
-                PointerLockRelease={props.PointerLockRelease}
-            />
+                <LoadingView
+                    LaunchRequestStatus={props.LaunchRequestStatus}
+                    StreamerStatus={props.StreamerStatus}
+                    setLoaded={props.setLoaded}
+                />
+                <VideoStream
+                    VideoRef={videoRef}
+                    Emitter={props.InputEmitter}
+                    Stream={props.VideoStream}
+                    UseNativeTouchEvents={true}
+                    UsePointerLock={props.UsePointerLock}
+                    PointerLockRelease={props.PointerLockRelease}
+                />
 
-            {/* <Button
+                <Button
                     onClick={handle.enter}
-                    style={{ position: "absolute", top: 10, right: 10 }}
-                    className={
-                        isIPhone ||
-                        handle.active ||
-                        props.StreamerStatus !== StreamerStatus.Connected
-                            ? "hidden"
-                            : ""
-                    }
+                    style={{
+                        position: "absolute",
+                        top: 10,
+                        right: 10,
+                        backgroundColor: "rgba(0,0,0,0.4)",
+                        borderColor: "#777777",
+                        color: "white",
+                        visibility:
+                            isIPhone ||
+                            handle.active ||
+                            props.StreamerStatus !== StreamerStatus.Connected
+                                ? "hidden"
+                                : "visible",
+                    }}
+                    type="default"
                 >
-                    <Icon name="expand" />
-                </Button> */}
-
-            {/* {props.StreamerStatus !== StreamerStatus.Connected && (
-                    <img
-                        alt="PureWeb Logo"
-                        src="/pureweb.svg"
-                        style={{
-                            width: 100,
-                            position: "absolute",
-                            bottom: 50,
-                            right: 10,
-                        }}
-                    />
-                )} */}
-            {/* </FullScreen> */}
+                    <ExpandOutlined />
+                </Button>
+            </FullScreen>
         </div>
     );
 };

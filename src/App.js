@@ -17,11 +17,7 @@ function App() {
     return (
         <Router history={history}>
             <Suspense
-                fallback={
-                    <Layout>
-                        <Spinner size={100} />
-                    </Layout>
-                }
+                fallback={<Layout>{/* <Spinner size={100} /> */}</Layout>}
             >
                 <>
                     <Toaster position="top-right" />

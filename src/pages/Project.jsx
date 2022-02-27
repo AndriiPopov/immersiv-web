@@ -25,7 +25,7 @@ const Project = (props) => {
             });
 
         constantService.getConstant().then((response) => {
-            if (response.data.length) setConstant(response.data[0]);
+            if (response.data) setConstant(response.data);
         });
     }, [id, featured]);
     return (

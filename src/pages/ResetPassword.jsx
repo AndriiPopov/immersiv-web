@@ -1,24 +1,18 @@
-import { Button, HelperText, Input, Label } from "@windmill/react-ui";
-import PulseLoader from "react-spinners/PulseLoader";
 import useQuery from "helpers/useQuery";
 import Layout from "layout/Layout";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import authService from "services/auth.service";
-import { useForm } from "react-hook-form";
+import { Button, Form, Input, Spin, Typography } from "antd";
 
 const ResetPassword = () => {
     const [msg, setMsg] = useState("");
-    const [resetmsg, setResetMsg] = useState("");
     const [isResetting, setIsResetting] = useState(false);
     const history = useHistory();
     const query = useQuery();
     const token = query.get("token");
     const email = query.get("email");
-    const { register, handleSubmit, errors, watch } = useForm();
-    const password = useRef({});
-    password.current = watch("password", "");
 
     useEffect(() => {
         authService
@@ -27,14 +21,13 @@ const ResetPassword = () => {
             .catch((e) => console.error(e.response));
     }, [token, email]);
 
-    const handlePasswordReset = (data) => {
+    const onFinish = (data) => {
         setIsResetting(true);
         authService
             .resetPassword(token, email, data.password, data.password2)
             .then(({ data }) => {
                 if (data.status === "error") {
                     setIsResetting(false);
-                    setResetMsg(data);
                     return;
                 }
                 toast.success(data.message);
@@ -49,94 +42,108 @@ const ResetPassword = () => {
     return (
         <Layout title="Reset Password">
             {msg.showForm ? (
-                <div className="pt-12">
-                    <header className="max-w-lg mx-auto mb-4">
-                        <h1 className="text-4xl font-bold text-center">
-                            Reset Password
-                        </h1>
-                    </header>
-                    <div className="mx-auto max-w-lg shadow-2xl p-8 md:p-10">
-                        <form
-                            className="flex flex-col"
-                            onSubmit={handleSubmit(handlePasswordReset)}
-                        >
-                            <Label className="mb-4">
-                                <span className="block text-gray-700 text-sm font-bold mb-2">
-                                    Password
-                                </span>
-                                <Input
-                                    className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
-                                    type="password"
-                                    inputMode="password"
-                                    name="password"
-                                    ref={register({
-                                        required: "Password cannot be empty",
-                                        minLength: {
-                                            value: 6,
-                                            message:
-                                                "Password must be greater than 5 characters",
-                                        },
-                                    })}
-                                />
-                                {errors.password &&
-                                    errors.password.type === "required" && (
-                                        <HelperText
-                                            className="pt-2"
-                                            valid={false}
-                                        >
-                                            {resetmsg.message}
-                                        </HelperText>
-                                    )}
-                                {errors.password &&
-                                    errors.password.type === "minLength" && (
-                                        <HelperText
-                                            className="pt-2"
-                                            valid={false}
-                                        >
-                                            {resetmsg.message}
-                                        </HelperText>
-                                    )}
-                                <HelperText className="mt-1 italic" valid>
-                                    Password must be greater than 5 characters
-                                </HelperText>
-                            </Label>
-                            <Label className="mb-4">
-                                <span className="block text-gray-700 text-sm font-bold mb-2">
-                                    Confirm Password
-                                </span>
-                                <Input
-                                    className="rounded w-full text-gray-700 focus:outline-none border px-2 py-2 focus:border-purple-600 transition duration-500"
-                                    type="password"
-                                    inputMode="password"
-                                    name="password2"
-                                    ref={register({
-                                        validate: (value) =>
-                                            value === password.current ||
-                                            "Passwords do not match",
-                                    })}
-                                />
-                            </Label>
-                            {errors.password &&
-                                errors.password.type === "required" && (
-                                    <HelperText className="pt-2" valid={false}>
-                                        {resetmsg.message}
-                                    </HelperText>
-                                )}
-                            {resetmsg && (
-                                <HelperText className="pt-2" valid={false}>
-                                    {resetmsg.message || ""}
-                                </HelperText>
-                            )}
-                            <Button type="submit" disabled={isResetting}>
-                                {isResetting ? (
-                                    <PulseLoader size={10} color={"#0a138b"} />
-                                ) : (
-                                    "Reset Password"
-                                )}
+                <Form
+                    labelCol={{
+                        xs: {
+                            span: 24,
+                        },
+                        sm: {
+                            span: 8,
+                        },
+                    }}
+                    wrapperCol={{
+                        xs: {
+                            span: 24,
+                        },
+                        sm: {
+                            span: 16,
+                        },
+                    }}
+                    name="normal_login"
+                    onFinish={onFinish}
+                    style={{
+                        padding: "100px 16px",
+                        maxWidth: "500px",
+                        margin: "auto",
+                    }}
+                >
+                    <Typography.Title
+                        style={{ textAlign: "center", marginBottom: "50px" }}
+                    >
+                        Reset password
+                    </Typography.Title>
+                    <Form.Item
+                        name="password"
+                        label="Password"
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    "Please input your password at least 6 symbols long!",
+                                min: 6,
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="confirm"
+                        label="Confirm Password"
+                        dependencies={["password"]}
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please confirm your password!",
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (
+                                        !value ||
+                                        getFieldValue("password") === value
+                                    ) {
+                                        return Promise.resolve();
+                                    }
+
+                                    return Promise.reject(
+                                        new Error(
+                                            "The two passwords that you entered do not match!"
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item
+                        wrapperCol={{
+                            xs: {
+                                span: 24,
+                                offset: 0,
+                            },
+                            sm: {
+                                span: 16,
+                                offset: 8,
+                            },
+                        }}
+                    >
+                        {isResetting ? (
+                            <Spin />
+                        ) : (
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                style={{ width: "100%" }}
+                            >
+                                Reset password
                             </Button>
-                        </form>
-                    </div>
-                </div>
+                        )}
+                    </Form.Item>
+                </Form>
             ) : (
                 <div>{msg.message}</div>
             )}

@@ -1,12 +1,25 @@
+import { Spin, Typography } from "antd";
 import React from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 
 const Spinner = ({ css, size, loading }) => {
-  return (
-    <div className="absolute transform -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4">
-      <ClipLoader css={css} size={size} color={"#123abc"} loading={loading} />
-    </div>
-  );
+    return (
+        <div
+            style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                // height: "100%",
+                flexDirection: "column",
+            }}
+        >
+            <Spin size="large" />
+
+            <Typography.Text style={{ paddingTop: 20 }}>
+                Loading...
+            </Typography.Text>
+        </div>
+    );
 };
 
 export default Spinner;

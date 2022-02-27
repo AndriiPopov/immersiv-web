@@ -4,16 +4,20 @@ import ReactDOM from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import "./tailwind.output.css";
 
+import "antd/dist/antd.css";
+import { ThemeProvider } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
+const mdTheme = createTheme();
 ReactDOM.render(
-    <>
+    <ThemeProvider theme={mdTheme}>
         <HelmetProvider>
             <UserProvider>
                 <App />
             </UserProvider>
         </HelmetProvider>
-    </>,
+    </ThemeProvider>,
+
     document.getElementById("root")
 );
 

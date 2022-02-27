@@ -13,6 +13,7 @@ export const Constant = (props) => {
     const save = async () => {
         const response = await constantService.saveConstant(editState);
         if (response.data) data.setConstant(response.data);
+        else data.setConstant({});
     };
 
     return menuTab === "constant" ? (

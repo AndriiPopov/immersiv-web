@@ -1,26 +1,23 @@
-import { Button, HelperText, Input, Label } from "@windmill/react-ui";
+// import { Button, HelperText, Input, Label } from "@windmill/react-ui";
 import ForgotPasswordModal from "components/ForgotPasswordModal";
 import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Redirect } from "react-router-dom";
-import PulseLoader from "react-spinners/PulseLoader";
 import authService from "services/auth.service";
+import { Form, Input, Button, Typography } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const Login = () => {
     const { isLoggedIn, setUserState } = useUser();
-    const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [redirectToReferrer, setRedirectToReferrer] = useState(false);
-    const { register, handleSubmit, errors } = useForm();
 
-    const onSubmit = async (data) => {
+    const onFinish = async (data) => {
         const { email, password } = data;
 
         try {
-            setError("");
             setIsLoading(true);
             const data = await authService.login(email, password);
             toast.success("Login successful 🔓");
@@ -32,7 +29,6 @@ const Login = () => {
             }, 1500);
         } catch (error) {
             setIsLoading(false);
-            setError(error.response?.data.message);
         }
     };
 
@@ -44,79 +40,74 @@ const Login = () => {
     }
 
     return (
-        <Layout title="Login">
-            <div className="flex items-center justify-center m-auto mt-20">
-                <form
-                    className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col w-full md:w-1/2"
-                    onSubmit={handleSubmit(onSubmit)}
+        <Layout title="Login" loading={isLoading}>
+            <Form
+                name="normal_login"
+                onFinish={onFinish}
+                style={{
+                    padding: "100px 16px",
+                    maxWidth: "500px",
+                    margin: "auto",
+                }}
+            >
+                <Typography.Title
+                    style={{ textAlign: "center", marginBottom: "50px" }}
                 >
-                    <h1 className="text-center text-4xl my-4">
-                        Manage projects
-                    </h1>
-                    <div className="">
-                        <Label className="block text-grey-darker text-sm font-bold mb-2">
-                            <span>Email</span>
-                        </Label>
-                        <Input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-                            type="email"
-                            name="email"
-                            ref={register({
-                                required: true,
-                                // eslint-disable-next-line no-useless-escape
-                                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                            })}
-                            placeholder="Enter a valid email"
-                        />
-                    </div>
-                    {errors.email && errors.email.type === "required" && (
-                        <HelperText className="mt-1 italic" valid={false}>
-                            Email required
-                        </HelperText>
-                    )}
-                    {errors.email && errors.email.type === "pattern" && (
-                        <HelperText className="mt-1 italic" valid={false}>
-                            Invalid email
-                        </HelperText>
-                    )}
-                    <div className="mt-4">
-                        <Label className="block text-grey-darker text-sm font-bold mb-2">
-                            <span>Password</span>
-                        </Label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-                            type="password"
-                            name="password"
-                            ref={register({ required: true })}
-                        />
-                    </div>
-                    {errors.password && errors.password.type === "required" && (
-                        <HelperText className="mt-1 italic" valid={false}>
-                            Password required
-                        </HelperText>
-                    )}
-
-                    {error && (
-                        <HelperText className="mt-1 italic" valid={false}>
-                            {error}
-                        </HelperText>
-                    )}
-                    <div className="mt-4">
+                    Manage IMMERSIVE
+                </Typography.Title>
+                <Form.Item
+                    name="email"
+                    rules={[
+                        {
+                            type: "email",
+                            message: "The input is not valid E-mail!",
+                        },
+                        {
+                            required: true,
+                            message: "Please input your E-mail!",
+                        },
+                    ]}
+                >
+                    <Input
+                        prefix={
+                            <UserOutlined className="site-form-item-icon" />
+                        }
+                        placeholder="Email"
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please input your Password!",
+                        },
+                    ]}
+                >
+                    <Input.Password
+                        prefix={
+                            <LockOutlined className="site-form-item-icon" />
+                        }
+                        type="password"
+                        placeholder="Password"
+                    />
+                </Form.Item>
+                <Form.Item>
+                    <a>
                         <ForgotPasswordModal />
-                    </div>
-                    <Button type="submit" disabled={isLoading}>
-                        {isLoading ? (
-                            <PulseLoader
-                                color={"#0a138b"}
-                                size={10}
-                                loading={isLoading}
-                            />
-                        ) : (
-                            "Login"
-                        )}
+                    </a>
+                </Form.Item>
+
+                <Form.Item>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ width: "100%" }}
+                    >
+                        Log in
                     </Button>
-                </form>
-            </div>
+                </Form.Item>
+            </Form>
         </Layout>
     );
 };
