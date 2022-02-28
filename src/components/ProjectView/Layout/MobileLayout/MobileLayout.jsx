@@ -8,7 +8,11 @@ export const MobileLayout = (props) => {
     const { project, constant } = props;
     return (
         <div style={{ flex: 1, display: "flex" }}>
-            <StreamViewWrapper setLoaded={props.setLoaded} project={project} />
+            <StreamViewWrapper
+                setLoaded={props.setLoaded}
+                setStatus={props.setStatus}
+                project={project}
+            />
             {props.loaded && (
                 <img
                     src="/images/logo-white.png"

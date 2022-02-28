@@ -1,5 +1,5 @@
 import { IdleTimeout, VideoStream, System } from "@pureweb/platform-sdk-react";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { LoadingView } from "../LoadingView/LoadingView";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
@@ -16,31 +16,31 @@ export const EmbeddedView = (props) => {
         System.Browser().os === "iOS" &&
         !window.navigator.userAgent.includes("iPad");
 
-    useEffect(() => {
-        const updateVideoScale = () => {
-            const box = videoRef.current;
-            if (box) {
-                const width = box.offsetWidth;
-                const height = box?.offsetHeight;
-                const presetRatio = 16 / 9;
-                const actualRatio = width / height;
-                if (actualRatio > presetRatio) {
-                    box.style.transform = `scale(${
-                        actualRatio / presetRatio
-                    }, 1)`;
-                } else {
-                    box.style.transform = `scale(1, ${
-                        presetRatio / actualRatio
-                    })`;
-                }
-            }
-        };
+    // useEffect(() => {
+    //     const updateVideoScale = () => {
+    //         const box = videoRef.current;
+    //         if (box) {
+    //             const width = box.offsetWidth;
+    //             const height = box?.offsetHeight;
+    //             const presetRatio = 16 / 9;
+    //             const actualRatio = width / height;
+    //             if (actualRatio > presetRatio) {
+    //                 box.style.transform = `scale(${
+    //                     actualRatio / presetRatio
+    //                 }, 1)`;
+    //             } else {
+    //                 box.style.transform = `scale(1, ${
+    //                     presetRatio / actualRatio
+    //                 })`;
+    //             }
+    //         }
+    //     };
 
-        updateVideoScale();
+    //     updateVideoScale();
 
-        window.addEventListener("resize", updateVideoScale);
-        return () => window.removeEventListener("resize", updateVideoScale);
-    }, []);
+    //     window.addEventListener("resize", updateVideoScale);
+    //     return () => window.removeEventListener("resize", updateVideoScale);
+    // }, []);
     return (
         <div style={{ flex: 1, position: "relative" }}>
             <FullScreen handle={handle} className={styles.fullscreen}>

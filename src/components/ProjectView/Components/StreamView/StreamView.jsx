@@ -128,6 +128,7 @@ const StreamView = (props) => {
     // Log status messages
     useEffect(() => {
         logger.info("Status", status, streamerStatus);
+        props.setStatus(status);
     }, [status, streamerStatus]);
     console.log(project);
     // Notify user of missing or errors in configuration
@@ -321,7 +322,11 @@ const StreamViewWrapper = (props) => {
                 color: "white",
             }}
         >
-            <StreamView setLoaded={props.setLoaded} project={props.project} />
+            <StreamView
+                setLoaded={props.setLoaded}
+                setStatus={props.setStatus}
+                project={props.project}
+            />
         </div>
     ) : (
         <div className="ui red segment center aligned basic">

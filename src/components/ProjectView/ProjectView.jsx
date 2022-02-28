@@ -16,6 +16,7 @@ const ProjectView = (props) => {
     const [width, height] = useWindowSize();
     const isMobile = isMobileAgent || width < 1200 || height < 700;
     const [loaded, setLoaded] = useState(false);
+    const [status, setStatus] = useState(false);
 
     //Add google analytic
     // useEffect(() => {
@@ -30,18 +31,19 @@ const ProjectView = (props) => {
             {isMobile ? (
                 <MobileLayout
                     setLoaded={setLoaded}
-                    loaded={loaded}
+                    setStatus={setStatus}
                     project={project}
                     constant={constant}
                 />
             ) : (
                 <DesktopLayout
                     setLoaded={setLoaded}
+                    setStatus={setStatus}
                     project={project}
                     constant={constant}
                 />
             )}
-            <Loading loaded={loaded} />
+            <Loading loaded={loaded} status={status} />
         </>
     );
 };

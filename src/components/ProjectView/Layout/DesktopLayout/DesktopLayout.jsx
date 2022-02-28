@@ -18,6 +18,7 @@ export const DesktopLayout = (props) => {
                     <div className={styles.viewInner}>
                         <StreamViewWrapper
                             setLoaded={props.setLoaded}
+                            setStatus={props.setStatus}
                             project={project}
                         />
                     </div>
