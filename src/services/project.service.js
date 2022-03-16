@@ -10,7 +10,7 @@ class ProjectService {
     }
 
     getFeaturedProject() {
-        return API.get(`/projects/__featured__`);
+        return API.get(`/projects/url/__featured__`);
     }
     saveProject(id, data) {
         return API.put(`/projects/${id}`, data);

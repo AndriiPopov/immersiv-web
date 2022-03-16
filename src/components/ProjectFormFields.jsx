@@ -71,7 +71,7 @@ const ProjectFormFields = () => {
                 <Input placeholder="Google analytics property id" />
             </Form.Item>
 
-            <Form.Item name="published">
+            <Form.Item name="published" valuePropName="checked">
                 <Checkbox>Published</Checkbox>
             </Form.Item>
 

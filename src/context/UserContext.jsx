@@ -44,7 +44,6 @@ const UserProvider = ({ children }) => {
     };
 
     const logout = () => {
-        console.log("logout");
         setAuthData(null);
         setIsLoggedIn(false);
         authService.logout();

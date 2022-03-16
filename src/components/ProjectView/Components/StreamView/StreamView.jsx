@@ -130,7 +130,6 @@ const StreamView = (props) => {
         logger.info("Status", status, streamerStatus);
         props.setStatus(status);
     }, [status, streamerStatus]);
-    console.log(project);
     // Notify user of missing or errors in configuration
     if (!project.modelId || !project.projectId) {
         props.setLoaded(true);

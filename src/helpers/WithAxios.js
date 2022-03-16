@@ -18,7 +18,6 @@ const WithAxios = ({ children }) => {
                     ) {
                         return new Promise((resolve, reject) => {
                             setIsLoggedIn(false);
-                            console.log("here");
                             setAuthData(null);
                             setUserData(null);
                             history.push("/login");
@@ -41,7 +40,6 @@ const WithAxios = ({ children }) => {
                         } catch (error) {
                             localStorage.removeItem("token");
                             setIsLoggedIn(false);
-                            console.log("here2");
                             setAuthData(null);
                             setUserData(null);
                             history.push("/login");

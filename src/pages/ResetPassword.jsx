@@ -13,7 +13,7 @@ const ResetPassword = () => {
     const query = useQuery();
     const token = query.get("token");
     const email = query.get("email");
-    const { navigate } = useNavigate();
+    const navigate = useNavigate();
     useEffect(() => {
         authService
             .checkToken(token, email)
