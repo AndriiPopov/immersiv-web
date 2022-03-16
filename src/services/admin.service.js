@@ -1,7 +1,7 @@
 import API from "api/axios.config";
 
 class AdminService {
-    getAdmin(id) {
+    getAdmin() {
         return API.get(`/admins`);
     }
 

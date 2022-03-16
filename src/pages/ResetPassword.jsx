@@ -2,18 +2,18 @@ import useQuery from "helpers/useQuery";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import authService from "services/auth.service";
 import { Button, Form, Input, Spin, Typography } from "antd";
 
 const ResetPassword = () => {
     const [msg, setMsg] = useState("");
     const [isResetting, setIsResetting] = useState(false);
-    const history = useHistory();
+
     const query = useQuery();
     const token = query.get("token");
     const email = query.get("email");
-
+    const { navigate } = useNavigate();
     useEffect(() => {
         authService
             .checkToken(token, email)
@@ -32,7 +32,7 @@ const ResetPassword = () => {
                 }
                 toast.success(data.message);
                 setTimeout(() => {
-                    history.push("/login");
+                    navigate("/login");
                 }, 2000);
             })
             .catch((err) => {

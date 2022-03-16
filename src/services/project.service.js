@@ -5,6 +5,10 @@ class ProjectService {
         return API.get(`/projects${id ? "/" + id : ""}`);
     }
 
+    getProjectByUrl(id) {
+        return API.get(`/projects/url/${id}`);
+    }
+
     getFeaturedProject() {
         return API.get(`/projects/__featured__`);
     }

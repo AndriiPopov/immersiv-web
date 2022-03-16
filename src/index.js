@@ -6,18 +6,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import "antd/dist/antd.css";
-import { ThemeProvider } from "@mui/material/styles";
-import { createTheme } from "@mui/material/styles";
-const mdTheme = createTheme();
-ReactDOM.render(
-    <ThemeProvider theme={mdTheme}>
-        <HelmetProvider>
-            <UserProvider>
-                <App />
-            </UserProvider>
-        </HelmetProvider>
-    </ThemeProvider>,
 
+ReactDOM.render(
+    <HelmetProvider>
+        <UserProvider>
+            <App />
+        </UserProvider>
+    </HelmetProvider>,
     document.getElementById("root")
 );
 

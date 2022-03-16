@@ -1,11 +1,10 @@
 import React from "react";
-import Phone from "@mui/icons-material/Phone";
-import Mail from "@mui/icons-material/Mail";
 
 import StreamViewWrapper from "../../Components/StreamView/StreamView";
 import { PoweredLogo } from "./PoweredLogo";
 
 import styles from "./DesktopLayout.module.css";
+import { MailFilled, PhoneFilled } from "@ant-design/icons";
 
 export const DesktopLayout = (props) => {
     const { project, constant } = props;
@@ -51,9 +50,8 @@ export const DesktopLayout = (props) => {
                             className={styles.contactWrap}
                         >
                             <div className={styles.contactIconWrap}>
-                                <Phone
+                                <PhoneFilled
                                     name="phone"
-                                    size="small"
                                     className={styles.contactIcon}
                                 />
                             </div>
@@ -68,7 +66,7 @@ export const DesktopLayout = (props) => {
                             className={styles.contactWrap}
                         >
                             <div className={styles.contactIconWrap}>
-                                <Mail
+                                <MailFilled
                                     name="mail"
                                     size="small"
                                     className={styles.contactIcon}

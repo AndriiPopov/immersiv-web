@@ -4,15 +4,17 @@ import { useUser } from "context/UserContext";
 import Layout from "layout/Layout";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { Redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import authService from "services/auth.service";
 import { Form, Input, Button, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const Login = () => {
-    const { isLoggedIn, setUserState } = useUser();
+    const { isLoggedIn, setUserState, authData } = useUser();
     const [isLoading, setIsLoading] = useState(false);
     const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+
+    const navigate = useNavigate();
 
     const onFinish = async (data) => {
         const { email, password } = data;
@@ -32,11 +34,11 @@ const Login = () => {
         }
     };
 
-    if (redirectToReferrer) {
-        return <Redirect to="/admin" />;
-    }
-    if (isLoggedIn) {
-        return <Redirect to="/admin" />;
+    if (
+        (isLoggedIn || redirectToReferrer) &&
+        (authData?.super || authData?.projectId)
+    ) {
+        navigate("/admin");
     }
 
     return (

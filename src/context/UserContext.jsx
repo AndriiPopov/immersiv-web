@@ -1,6 +1,7 @@
 import WithAxios from "helpers/WithAxios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import authService from "services/auth.service";
+import jwt_decode from "jwt-decode";
 
 const UserContext = createContext();
 
@@ -8,26 +9,42 @@ const UserProvider = ({ children }) => {
     const [authData, setAuthData] = useState({
         token: "",
     });
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         if (localStorage.getItem("token")) {
             setIsLoggedIn(true);
-            setAuthData(JSON.parse(localStorage.getItem("token")));
+            setAuthData(() =>
+                getTokenData(JSON.parse(localStorage.getItem("token")).token)
+            );
         }
     }, []);
 
+    const getTokenData = (token) => {
+        if (token) {
+            const decoded = jwt_decode(token);
+            return {
+                ...decoded,
+                token,
+            };
+        } else
+            return {
+                token: "",
+            };
+    };
+
     const setUserInfo = (data) => {
         const { token } = data;
+
         setIsLoggedIn(true);
 
-        setAuthData({
-            token,
-        });
+        setAuthData(() => getTokenData(token));
         localStorage.setItem("token", JSON.stringify(token));
     };
 
     const logout = () => {
+        console.log("logout");
         setAuthData(null);
         setIsLoggedIn(false);
         authService.logout();

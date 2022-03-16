@@ -20,7 +20,7 @@ const Project = (props) => {
                 setProjectData(response.data);
             });
         else
-            projectService.getProject(id).then((response) => {
+            projectService.getProjectByUrl(id).then((response) => {
                 setProjectData(response.data);
             });
 

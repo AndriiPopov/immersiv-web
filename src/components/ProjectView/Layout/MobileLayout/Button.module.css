@@ -1,5 +1,6 @@
 .button {
     color: white;
+    font-size: 20px;
 }
 .wrap {
     flex: 1;

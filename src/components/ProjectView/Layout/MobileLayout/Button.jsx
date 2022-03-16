@@ -1,16 +1,15 @@
 import React from "react";
 
 import styles from "./Button.module.css";
-import Phone from "@mui/icons-material/Phone";
-import Mail from "@mui/icons-material/Mail";
+import { MailFilled, PhoneFilled } from "@ant-design/icons";
 
 export const Button = (props) => {
     return (
         <a className={styles.wrap} href={props.link}>
             {props.name === "phone" ? (
-                <Phone className={styles.button}></Phone>
+                <PhoneFilled className={styles.button}></PhoneFilled>
             ) : (
-                <Mail className={styles.button}></Mail>
+                <MailFilled className={styles.button}></MailFilled>
             )}
         </a>
     );
