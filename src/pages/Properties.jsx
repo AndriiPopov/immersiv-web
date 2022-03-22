@@ -1,30 +1,18 @@
-import LayoutHOC from "layout/Layout";
 import React, { useEffect, useRef, useState } from "react";
 
-import {
-    Button,
-    Dropdown,
-    Form,
-    Input,
-    Layout,
-    List,
-    Menu,
-    Modal,
-    PageHeader,
-    Popconfirm,
-    Select,
-} from "antd";
-import { Content } from "antd/lib/layout/layout";
-import { MoreOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Select } from "antd";
+
 import { useUser } from "context/UserContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import propertyService from "services/property.service";
 import toast from "react-hot-toast";
+import PropertiesTable from "components/ProjectView/Components/PropertiesTable";
+import projectService from "services/project.service";
 
 const Properties = (props) => {
+    const { admin, id, project, properties, setProject, setProperties } = props;
     const formRef = useRef(null);
-    const { id } = useParams();
-    const [properties, setProperties] = useState(null);
+
     const [editModalOpen, setEditModalOpen] = useState(null);
     const { isLoggedIn, authData, logout } = useUser();
     const navigate = useNavigate();
@@ -32,6 +20,10 @@ const Properties = (props) => {
     useEffect(() => {
         propertyService.getProperty(id).then((response) => {
             setProperties(response.data);
+        });
+
+        projectService.getProject(id).then((response) => {
+            setProject(response.data);
         });
     }, []);
 
@@ -54,10 +46,28 @@ const Properties = (props) => {
         }
     }, [isLoggedIn, authData?.super, authData?.projectId]);
 
+    useEffect(() => {
+        if (formRef.current) {
+            if (editModalOpen)
+                formRef.current.setFieldsValue(
+                    editModalOpen.id
+                        ? transferOrientationToString(editModalOpen)
+                        : editModalOpen
+                );
+        }
+    }, [editModalOpen?.id]);
+
     const onFinish = async (values) => {
         const response = editModalOpen?.id
-            ? await propertyService.saveProperty(id, editModalOpen.id, values)
-            : await propertyService.createProperty(id, values);
+            ? await propertyService.saveProperty(
+                  id,
+                  editModalOpen.id,
+                  transferOrientationToObject(values)
+              )
+            : await propertyService.createProperty(
+                  id,
+                  transferOrientationToObject(values)
+              );
         if (response.data) {
             toast.success("Saved");
             setProperties(response.data);
@@ -66,178 +76,127 @@ const Properties = (props) => {
         }
     };
 
-    const deleteProperty = async (propertyId) => {
-        const response = await propertyService.deleteProperty(id, propertyId);
-        if (response.data) setProperties(response.data);
+    const transferOrientationToObject = (data) => {
+        const o = {};
+        if (data.Orientation.indexOf("N") !== -1) o.N = true;
+        else if (data.Orientation.indexOf("S") !== -1) o.S = true;
+        if (data.Orientation.indexOf("E") !== -1) o.E = true;
+        else if (data.Orientation.indexOf("W") !== -1) o.W = true;
+        return { ...data, Orientation: o };
     };
 
+    const transferOrientationToString = (data) => {
+        let o = "";
+        if (data.Orientation.N) o = o + "N";
+        else if (data.Orientation.S) o = o + "S";
+        if (data.Orientation.E) o = o + "E";
+        else if (data.Orientation.W) o = o + "W";
+        return { ...data, Orientation: o };
+    };
     const { Option } = Select;
 
     return (
-        <LayoutHOC loading={!properties}>
-            <Layout
-                style={{
-                    height: "100%",
-                    display: "flex",
-                    flex: 1,
-                    background: "white",
-                }}
+        <>
+            {admin && (
+                <Button
+                    onClick={() => setEditModalOpen({})}
+                    style={{ margin: "16px" }}
+                >
+                    Add property
+                </Button>
+            )}
+            <Modal
+                visible={!!editModalOpen}
+                onCancel={() => setEditModalOpen(null)}
+                footer={null}
             >
-                <PageHeader
-                    onBack={() => navigate(`/admin/projects/${id}`)}
-                    title={`Properties of project id: ${id}`}
-                    style={{ boxShadow: "1px 1px 10px 1px #ccc" }}
-                />
-
-                <Content
+                <Form
+                    name="normal_login"
+                    onFinish={onFinish}
                     style={{
-                        flex: 1,
-                        overflow: "auto",
-                        padding: "16px",
-                        maxWidth: "800px",
-                        width: "100%",
+                        padding: " 16px",
+                        maxWidth: "500px",
                         margin: "auto",
                     }}
+                    ref={formRef}
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 16 }}
                 >
-                    <Button
-                        onClick={() => setEditModalOpen({})}
-                        style={{ margin: "16px" }}
+                    <Form.Item
+                        name="Name"
+                        label="Name"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please add name!",
+                            },
+                        ]}
                     >
-                        Add property
-                    </Button>
-                    <Modal
-                        visible={!!editModalOpen}
-                        onCancel={() => setEditModalOpen(null)}
-                        footer={null}
+                        <Input placeholder="Name" readOnly={!admin} />
+                    </Form.Item>
+
+                    <Form.Item name="Surface" label="Surface">
+                        <Input placeholder="Surface" type="number" />
+                    </Form.Item>
+                    <Form.Item name="Price" label="Price">
+                        <Input placeholder="Price" type="number" />
+                    </Form.Item>
+                    <Form.Item name="BedroomsCount" label="Bedrooms">
+                        <Input placeholder="Bedrooms" type="number" />
+                    </Form.Item>
+                    <Form.Item name="BathroomsCount" label="Bathrooms">
+                        <Input placeholder="Bathrooms" type="number" />
+                    </Form.Item>
+                    <Form.Item name="Orientation" label="Orientation">
+                        <Select>
+                            <Option value="N">North</Option>
+                            <Option value="NE">North-East</Option>
+                            <Option value="E">East</Option>
+                            <Option value="SE">South-East</Option>
+                            <Option value="S">South</Option>
+                            <Option value="SW">South-West</Option>
+                            <Option value="W">West</Option>
+                            <Option value="NW">North-West</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        name="Availability"
+                        label="Availability"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please set the status!",
+                            },
+                        ]}
                     >
-                        <Form
-                            name="normal_login"
-                            onFinish={onFinish}
-                            style={{
-                                padding: " 16px",
-                                maxWidth: "500px",
-                                margin: "auto",
-                            }}
-                            ref={formRef}
+                        <Select>
+                            <Option value="available">Available</Option>
+                            <Option value="reserved">Reserved</Option>
+                            <Option value="sold">Sold</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            style={{ width: "100%" }}
                         >
-                            <Form.Item
-                                name="name"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please add name!",
-                                    },
-                                ]}
-                            >
-                                <Input placeholder="Name" />
-                            </Form.Item>
-                            <Form.Item
-                                name="propertyId"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please add id!",
-                                    },
-                                ]}
-                            >
-                                <Input placeholder="Property id" />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="status"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please set the status!",
-                                    },
-                                ]}
-                            >
-                                <Select>
-                                    <Option value="available">Available</Option>
-                                    <Option value="reserved">Reserved</Option>
-                                    <Option value="sold">Sold</Option>
-                                </Select>
-                            </Form.Item>
-
-                            <Form.Item>
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    style={{ width: "100%" }}
-                                >
-                                    Save
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </Modal>
-                    {properties && (
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={properties.sort((a, b) =>
-                                a.name > b.name ? 1 : -1
-                            )}
-                            renderItem={(property) => (
-                                <List.Item
-                                    actions={[
-                                        <Dropdown
-                                            overlay={
-                                                <Menu>
-                                                    <Menu.Item
-                                                        onClick={() => {
-                                                            setEditModalOpen(
-                                                                property
-                                                            );
-                                                            formRef.current &&
-                                                                formRef.current.setFieldsValue(
-                                                                    property
-                                                                );
-                                                        }}
-                                                    >
-                                                        Edit
-                                                    </Menu.Item>
-                                                    <Menu.Divider />
-                                                    <Popconfirm
-                                                        title="Are you sure to delete this property?"
-                                                        onConfirm={() =>
-                                                            deleteProperty(
-                                                                property.id
-                                                            )
-                                                        }
-                                                        okText="Yes"
-                                                        cancelText="No"
-                                                    >
-                                                        <Menu.Item
-                                                            key="3"
-                                                            danger
-                                                        >
-                                                            Delete
-                                                        </Menu.Item>
-                                                    </Popconfirm>
-                                                </Menu>
-                                            }
-                                            trigger={["click"]}
-                                        >
-                                            <MoreOutlined
-                                                style={{ fontSize: "30px" }}
-                                            />
-                                        </Dropdown>,
-                                    ]}
-                                    style={{
-                                        borderBottom: "3px solid #ccc",
-                                        paddingLeft: "16px",
-                                    }}
-                                >
-                                    <List.Item.Meta
-                                        title={`${property.name} (${property.status})`}
-                                        description={`Property id: ${property.propertyId}`}
-                                    />
-                                </List.Item>
-                            )}
-                        />
-                    )}
-                </Content>
-            </Layout>
-        </LayoutHOC>
+                            Save
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
+            {properties && project && (
+                <PropertiesTable
+                    properties={properties}
+                    setProperties={setProperties}
+                    project={project}
+                    admin={admin}
+                    setEditModalOpen={setEditModalOpen}
+                    transferOrientationToString={transferOrientationToString}
+                />
+            )}
+        </>
     );
 };
 

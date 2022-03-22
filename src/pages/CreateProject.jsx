@@ -78,9 +78,11 @@ const CreateProject = (props) => {
                             maxWidth: "500px",
                             margin: "auto",
                         }}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 16 }}
                     >
                         <ProjectFormFields />
-                        <Form.Item>
+                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                             <Button
                                 onClick={() => {
                                     if (formRef.current)
