@@ -2,6 +2,7 @@ import LayoutHOC from "layout/Layout";
 import React, { useEffect, useState } from "react";
 
 import { DatePicker, Layout, PageHeader } from "antd";
+
 import { Content } from "antd/lib/layout/layout";
 
 import { useUser } from "context/UserContext";
@@ -16,6 +17,7 @@ import { ChartItem } from "components/DashboardItem/DataItems";
 const AnalyticClient = (props) => {
     const { id } = useParams();
     const { logout, isLoggedIn, authData } = useUser();
+
     const [project, setProject] = useState(null);
     const [dateData, setDateData] = useState(null);
     const [cityData, setCityData] = useState(null);
@@ -26,6 +28,7 @@ const AnalyticClient = (props) => {
         moment().format(),
     ]);
     const navigate = useNavigate();
+
     useEffect(() => {
         if (
             !isLoggedIn ||
@@ -45,7 +48,6 @@ const AnalyticClient = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log("pPPPPPPPeriod", period);
         if (period.length === 2 && project?.id) {
             setDateData(null);
             setCityData(null);
@@ -56,7 +58,6 @@ const AnalyticClient = (props) => {
     }, [period[0], period[1], project?.id]);
 
     const getMetricData = () => {
-        console.log("req data");
         gaService
             .getGA(
                 project.id,
@@ -97,26 +98,6 @@ const AnalyticClient = (props) => {
             .catch((err) => {
                 toast.error("Source analytics data not loaded");
             });
-
-        // let value;
-        // let formattedValue;
-        // if (visual === "chart") {
-        //     value = res.data[strippedMetric];
-        //     formattedValue = value;
-        // } else {
-        //     try {
-        //         value = strippedMetric.startsWith("ga:")
-        //             ? res.data[strippedMetric]
-        //             : res.data[`ga:${strippedMetric}`];
-        //         formattedValue = parseInt(value.value, 10);
-        //     } catch (exp) {
-        //         console.log(exp);
-        //         formattedValue = "Error Retrieving Value";
-        //     }
-        // }
-        // console.log("data main", res.data);
-        // console.log("data formattedValue", formattedValue);
-        // setData(formattedValue);
     };
 
     return (
