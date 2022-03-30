@@ -61,7 +61,7 @@ export const EmbeddedView = (props) => {
                     VideoRef={videoRef}
                     Emitter={props.InputEmitter}
                     Stream={props.VideoStream}
-                    UseNativeTouchEvents={true}
+                    UseNativeTouchEvents={props.UseNativeTouchEvents}
                     UsePointerLock={props.UsePointerLock}
                     PointerLockRelease={props.PointerLockRelease}
                 />

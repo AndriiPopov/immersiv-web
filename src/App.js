@@ -1,12 +1,14 @@
 import history from "helpers/history";
 import Layout from "layout/Layout";
 import Admins from "pages/Admins";
+import AnalyticClient from "pages/AnalyticClient";
 import Constants from "pages/Constants";
 import CreateProject from "pages/CreateProject";
 import Login from "pages/Login";
 import ProjectDetails from "pages/ProjectDetails";
 import Projects from "pages/Projects";
 import Properties from "pages/Properties";
+import PropertiesAdmin from "pages/PropertiesAdmin";
 import PropertiesClient from "pages/PropertiesClient";
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
@@ -47,7 +49,7 @@ function App() {
                         <Route
                             exact
                             path="/admin/projects/:id/properties"
-                            element={<Properties />}
+                            element={<PropertiesAdmin />}
                         ></Route>
                         <Route
                             exact
@@ -73,6 +75,12 @@ function App() {
                             exact
                             path="/p-admin/:id"
                             element={<PropertiesClient />}
+                        ></Route>
+
+                        <Route
+                            exact
+                            path="/p-admin/:id/analytics"
+                            element={<AnalyticClient />}
                         ></Route>
 
                         <Route

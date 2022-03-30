@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, Switch } from "antd";
 import React from "react";
 
 const ProjectFormFields = () => {
@@ -6,6 +6,7 @@ const ProjectFormFields = () => {
         <>
             <Form.Item
                 name="name"
+                label="Name"
                 rules={[
                     {
                         required: true,
@@ -17,6 +18,7 @@ const ProjectFormFields = () => {
             </Form.Item>
             <Form.Item
                 name="url"
+                label="Url"
                 rules={[
                     {
                         required: true,
@@ -29,6 +31,7 @@ const ProjectFormFields = () => {
 
             <Form.Item
                 name="projectId"
+                label="Project id"
                 rules={[
                     {
                         required: true,
@@ -41,6 +44,7 @@ const ProjectFormFields = () => {
 
             <Form.Item
                 name="modelId"
+                label="Model id"
                 rules={[
                     {
                         required: true,
@@ -51,12 +55,13 @@ const ProjectFormFields = () => {
                 <Input placeholder="Model id" />
             </Form.Item>
 
-            <Form.Item name="adminEmail">
+            <Form.Item name="adminEmail" label="Client login">
                 <Input placeholder="Admin email" />
             </Form.Item>
 
             <Form.Item
                 name="adminPassword"
+                label="Client password"
                 rules={[
                     {
                         min: 6,
@@ -67,15 +72,34 @@ const ProjectFormFields = () => {
                 <Input placeholder="Admin password" />
             </Form.Item>
 
-            <Form.Item name="analytic">
+            <Form.Item name="analytic" label="Analytics property">
                 <Input placeholder="Google analytics property id" />
             </Form.Item>
 
-            <Form.Item name="published" valuePropName="checked">
-                <Checkbox>Published</Checkbox>
+            <Form.Item
+                name="mobileNativeEvents"
+                label="Mobile native events"
+                valuePropName="checked"
+            >
+                <Switch>Mobile native events</Switch>
+            </Form.Item>
+            <Form.Item
+                name="desktopNativeEvents"
+                label="Desktop native events"
+                valuePropName="checked"
+            >
+                <Switch />
             </Form.Item>
 
-            <Form.Item>
+            <Form.Item
+                name="published"
+                valuePropName="checked"
+                label="Published"
+            >
+                <Checkbox />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button
                     type="primary"
                     htmlType="submit"

@@ -19,6 +19,7 @@ import "./StreamView.css";
 import { EmbeddedView } from "../EmbededView/EmbededView";
 
 import logger from "../../Log";
+import { isMobile as isMobileAgent } from "react-device-detect";
 
 const audio = new Audio();
 audio.autoplay = true;
@@ -260,13 +261,17 @@ const StreamView = (props) => {
     }
 
     if (loading) {
+        const useNativeTouchEvents =
+            !!project[
+                isMobileAgent ? "mobileNativeEvents" : "desktopNativeEvents"
+            ];
         return (
             <EmbeddedView
                 VideoStream={videoStream}
                 StreamerStatus={streamerStatus}
                 LaunchRequestStatus={status}
                 InputEmitter={emitter}
-                UseNativeTouchEvents={true}
+                UseNativeTouchEvents={useNativeTouchEvents}
                 UsePointerLock={project.UsePointerLock}
                 PointerLockRelease={project.PointerLockRelease}
                 setLoaded={props.setLoaded}

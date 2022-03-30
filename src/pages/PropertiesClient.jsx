@@ -1,30 +1,31 @@
 import LayoutHOC from "layout/Layout";
 import React, { useEffect, useState } from "react";
-import projectService from "services/project.service";
 
 import { Drawer, Layout, Menu, PageHeader } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { MenuOutlined } from "@ant-design/icons";
 import { useUser } from "context/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
+import Properties from "./Properties";
+import projectService from "services/project.service";
 import propertyService from "services/property.service";
-import PropertiesTable from "components/ProjectView/Components/PropertiesTable";
 
 const PropertiesClient = (props) => {
     const { id } = useParams();
-    const [project, setProject] = useState(null);
-    const [properties, setProperties] = useState(null);
     const { logout, isLoggedIn, authData } = useUser();
     const navigate = useNavigate();
+    const [project, setProject] = useState(null);
+    const [properties, setProperties] = useState(null);
 
     const [openDrawer, setOpenDrawer] = useState(false);
-    useEffect(() => {
-        projectService.getProject(id).then((response) => {
-            setProject(response.data);
-        });
 
+    useEffect(() => {
         propertyService.getProperty(id).then((response) => {
             setProperties(response.data);
+        });
+
+        projectService.getProject(id).then((response) => {
+            setProject(response.data);
         });
     }, []);
 
@@ -41,7 +42,7 @@ const PropertiesClient = (props) => {
     }, [isLoggedIn, authData?.super, authData?.projectId]);
 
     return (
-        <LayoutHOC loading={!project || !properties}>
+        <LayoutHOC loading={!properties || !project}>
             <Layout
                 style={{
                     height: "100%",
@@ -53,7 +54,7 @@ const PropertiesClient = (props) => {
                 <PageHeader
                     onBack={() => setOpenDrawer(true)}
                     backIcon={<MenuOutlined />}
-                    title={project?.name || "Project"}
+                    title={"Appartments"}
                     style={{ boxShadow: "1px 1px 10px 1px #ccc" }}
                 />
 
@@ -62,18 +63,18 @@ const PropertiesClient = (props) => {
                         flex: 1,
                         overflow: "auto",
                         padding: "16px",
-                        maxWidth: "800px",
+                        maxWidth: "1200px",
                         width: "100%",
                         margin: "auto",
                     }}
                 >
-                    {properties && project && (
-                        <PropertiesTable
-                            properties={properties}
-                            setProperties={setProperties}
-                            project={project}
-                        />
-                    )}
+                    <Properties
+                        id={id}
+                        setProject={setProject}
+                        setProperties={setProperties}
+                        project={project}
+                        properties={properties}
+                    />
                 </Content>
             </Layout>
             <Drawer
@@ -95,7 +96,7 @@ const PropertiesClient = (props) => {
                                 navigate(`/p/${project.url}`);
                                 break;
                             case "analytics":
-                                navigate(`/p-admin/${project.url}/analytics`);
+                                navigate(`/p-admin/${project.id}/analytics`);
                                 break;
                             default:
                                 return;
