@@ -7,7 +7,6 @@ import CreateProject from "pages/CreateProject";
 import Login from "pages/Login";
 import ProjectDetails from "pages/ProjectDetails";
 import Projects from "pages/Projects";
-import Properties from "pages/Properties";
 import PropertiesAdmin from "pages/PropertiesAdmin";
 import PropertiesClient from "pages/PropertiesClient";
 import { lazy, Suspense } from "react";

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Chart } from "react-google-charts";
 import moment from "moment";
-import humanizeString from "humanize-string";
+import humanizeString from "string-humanize";
 
 export const ChartItem = (props) => {
     const {
@@ -50,40 +50,5 @@ export const ChartItem = (props) => {
         </div>
     );
 };
-
-// // import {
-// //     ResponsiveContainer,
-// //     LineChart,
-// //     XAxis,
-// //     YAxis,
-// //     CartesianGrid,
-// //     Line,
-// //     Tooltip,
-// // } from "recharts";
-
-// export const ChartItem = (props) => {
-//     const { data, xKey, valKey } = props;
-//     console.log("data in chart", data);
-//     return (
-//         <ResponsiveContainer height="75%" width="90%">
-//             <LineChart data={data}>
-//                 <XAxis dataKey={xKey} />
-//                 <YAxis type="number" domain={[0, "dataMax + 100"]} />
-//                 <Tooltip />
-//                 <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-//                 {data.rows.map((row) => {
-
-//                     return (
-//                         <Line
-//                             type="monotone"
-//                             dataKey={valKey}
-//                             stroke="#8884d8"
-//                         />
-//                     );
-//                 })}
-//             </LineChart>
-//         </ResponsiveContainer>
-//     );
-// };
 
 export default ChartItem;

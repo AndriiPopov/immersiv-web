@@ -29,6 +29,7 @@
         "react-scripts": "4.0.1",
         "recharts": "^2.1.9",
         "socket.io-client": "^4.4.1",
+        "string-humanize": "^1.0.1",
         "use-async-effect": "^2.2.5",
         "web-vitals": "^0.2.4"
     },

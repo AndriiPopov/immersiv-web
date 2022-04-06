@@ -1,4 +1,4 @@
-import ProjectView from "components/ProjectView/ProjectView";
+import ProjectView from "components/ProjectView/Layout/ProjectView";
 import Layout from "layout/Layout";
 import React, { useEffect, useState } from "react";
 import projectService from "services/project.service";
