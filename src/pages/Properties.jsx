@@ -2,20 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { Button, Form, Input, Modal, Select } from "antd";
 
-import { useUser } from "context/UserContext";
-import { useNavigate } from "react-router-dom";
 import propertyService from "services/property.service";
 import toast from "react-hot-toast";
 import PropertiesTable from "components/ProjectView/Components/PropertiesTable";
 import projectService from "services/project.service";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const Properties = (props) => {
     const { admin, id, project, properties, setProject, setProperties } = props;
     const formRef = useRef(null);
 
     const [editModalOpen, setEditModalOpen] = useState(null);
-    const { isLoggedIn, authData, logout } = useUser();
-    const navigate = useNavigate();
 
     useEffect(() => {
         propertyService.getProperty(id).then((response) => {
@@ -27,24 +24,7 @@ const Properties = (props) => {
         });
     }, []);
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-
-        if (!authData?.super) {
-            if (authData?.projectId) {
-                navigate(`/p-admin/${authData.projectId}`);
-                return null;
-            } else {
-                logout();
-                navigate("/login");
-                return null;
-            }
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
 
     useEffect(() => {
         if (formRef.current) {

@@ -1,39 +1,21 @@
 import LayoutHOC from "layout/Layout";
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import projectService from "services/project.service";
 
 import { Button, Layout, PageHeader, Form } from "antd";
 import { Content } from "antd/lib/layout/layout";
 
-import { useUser } from "context/UserContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ProjectFormFields from "components/ProjectFormFields";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const CreateProject = (props) => {
-    const { isLoggedIn, authData, logout } = useUser();
     const formRef = useRef(null);
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-
-        if (!authData?.super) {
-            if (authData?.projectId) {
-                navigate(`/p-admin/${authData.projectId}`);
-                return null;
-            } else {
-                logout();
-                navigate("/login");
-                return null;
-            }
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
 
     const onFinish = async (values) => {
         const response = await projectService.createProject(values);

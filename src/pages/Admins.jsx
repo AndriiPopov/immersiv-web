@@ -19,12 +19,12 @@ import { useUser } from "context/UserContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import adminService from "services/admin.service";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const Admins = (props) => {
     const formRef = useRef(null);
     const [admins, setAdmins] = useState(null);
     const [editModalOpen, setEditModalOpen] = useState(null);
-    const { isLoggedIn, authData, logout } = useUser();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -33,24 +33,7 @@ const Admins = (props) => {
         });
     }, []);
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-
-        if (!authData?.super) {
-            if (authData?.projectId) {
-                navigate(`/p-admin/${authData.projectId}`);
-                return null;
-            } else {
-                logout();
-                navigate("/login");
-                return null;
-            }
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
 
     const onFinish = async (values) => {
         const response = await adminService.createAdmin(values);

@@ -11,14 +11,15 @@ const UserProvider = ({ children }) => {
     });
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isInitiated, setIsInitiated] = useState(false);
 
     useEffect(() => {
+        console.log("token on startup", localStorage.getItem("token"));
         if (localStorage.getItem("token")) {
             setIsLoggedIn(true);
-            setAuthData(() =>
-                getTokenData(JSON.parse(localStorage.getItem("token")).token)
-            );
+            setAuthData(() => getTokenData(localStorage.getItem("token")));
         }
+        setIsInitiated(true);
     }, []);
 
     const getTokenData = (token) => {
@@ -40,7 +41,8 @@ const UserProvider = ({ children }) => {
         setIsLoggedIn(true);
 
         setAuthData(() => getTokenData(token));
-        localStorage.setItem("token", JSON.stringify(token));
+        localStorage.setItem("token", token);
+        console.log("token after login", localStorage.getItem("token"));
     };
 
     const logout = () => {
@@ -54,6 +56,7 @@ const UserProvider = ({ children }) => {
             value={{
                 setUserState: (data) => setUserInfo(data),
                 logout,
+                isInitiated,
                 isLoggedIn,
                 setIsLoggedIn,
                 authData,

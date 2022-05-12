@@ -4,13 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Layout, PageHeader, Form, Input } from "antd";
 import { Content } from "antd/lib/layout/layout";
 
-import { useUser } from "context/UserContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import constantService from "services/constant.service";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const Constants = (props) => {
-    const { isLoggedIn, authData, logout } = useUser();
     const [constants, setConstants] = useState(null);
     const formRef = useRef(null);
 
@@ -31,24 +30,7 @@ const Constants = (props) => {
             });
     }, []);
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-
-        if (!authData?.super) {
-            if (authData?.projectId) {
-                navigate(`/p-admin/${authData.projectId}`);
-                return null;
-            } else {
-                logout();
-                navigate("/login");
-                return null;
-            }
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
     const onFinish = async (values) => {
         const response = await constantService.saveConstant(values);
         if (response.data) {

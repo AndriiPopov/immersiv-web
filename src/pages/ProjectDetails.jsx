@@ -5,15 +5,15 @@ import projectService from "services/project.service";
 import { Button, Layout, PageHeader, Form, Typography } from "antd";
 import { Content } from "antd/lib/layout/layout";
 
-import { useUser } from "context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import ProjectFormFields from "components/ProjectFormFields";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const ProjectDetails = (props) => {
     const [project, setProject] = useState(null);
-    const { isLoggedIn, authData, logout } = useUser();
+
     const formRef = useRef(null);
 
     const { id } = useParams();
@@ -25,24 +25,7 @@ const ProjectDetails = (props) => {
     }, [id]);
 
     const navigate = useNavigate();
-    useEffect(() => {
-        if (!isLoggedIn) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-
-        if (!authData?.super) {
-            if (authData?.projectId) {
-                navigate(`/p-admin/${authData.projectId}`);
-                return null;
-            } else {
-                logout();
-                navigate("/login");
-                return null;
-            }
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
 
     const onFinish = async (values) => {
         const response = await projectService.saveProject(project.id, values);

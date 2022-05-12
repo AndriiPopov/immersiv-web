@@ -22,10 +22,11 @@ import {
 } from "@ant-design/icons";
 import { useUser } from "context/UserContext";
 import { useNavigate } from "react-router-dom";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const Projects = (props) => {
     const [projects, setProjects] = useState(null);
-    const { logout, isLoggedIn, authData } = useUser();
+    const { logout } = useUser();
     const navigate = useNavigate();
 
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -35,24 +36,7 @@ const Projects = (props) => {
         });
     }, []);
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-
-        if (!authData?.super) {
-            if (authData?.projectId) {
-                navigate(`/p-admin/${authData.projectId}`);
-                return null;
-            } else {
-                logout();
-                navigate("/login");
-                return null;
-            }
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
 
     const deleteProject = async (id) => {
         const response = await projectService.deleteProject(id);

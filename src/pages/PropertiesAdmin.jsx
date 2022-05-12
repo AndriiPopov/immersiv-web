@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { useUser } from "context/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Properties from "./Properties";
 import LayoutHOC from "layout/Layout";
@@ -8,31 +7,15 @@ import { Layout, PageHeader } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import propertyService from "services/property.service";
 import projectService from "services/project.service";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const PropertiesAdmin = (props) => {
     const { id } = useParams();
-    const { isLoggedIn, authData, logout } = useUser();
+
     const navigate = useNavigate();
     const [project, setProject] = useState(null);
     const [properties, setProperties] = useState(null);
-    useEffect(() => {
-        if (!isLoggedIn) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-
-        if (!authData?.super) {
-            if (authData?.projectId) {
-                navigate(`/p-admin/${authData.projectId}`);
-                return null;
-            } else {
-                logout();
-                navigate("/login");
-                return null;
-            }
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
 
     useEffect(() => {
         propertyService.getProperty(id).then((response) => {

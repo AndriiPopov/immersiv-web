@@ -5,7 +5,6 @@ import { DatePicker, Layout, PageHeader } from "antd";
 
 import { Content } from "antd/lib/layout/layout";
 
-import { useUser } from "context/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
 
 import projectService from "services/project.service";
@@ -13,10 +12,10 @@ import moment from "moment";
 import gaService from "services/ga.service";
 import toast from "react-hot-toast";
 import { ChartItem } from "components/DashboardItem/DataItems";
+import useLoginCheck from "hooks/useLoginCheck";
 
 const AnalyticClient = (props) => {
     const { id } = useParams();
-    const { logout, isLoggedIn, authData } = useUser();
 
     const [project, setProject] = useState(null);
     const [dateData, setDateData] = useState(null);
@@ -29,17 +28,7 @@ const AnalyticClient = (props) => {
     ]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (
-            !isLoggedIn ||
-            (!authData?.super &&
-                id.toString() !== authData?.projectId.toString())
-        ) {
-            logout();
-            navigate("/login");
-            return null;
-        }
-    }, [isLoggedIn, authData?.super, authData?.projectId]);
+    useLoginCheck();
 
     useEffect(() => {
         projectService.getProject(id).then((response) => {
