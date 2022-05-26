@@ -21,6 +21,18 @@ class ProjectService {
     deleteProject(id) {
         return API.delete(`/projects/${id}`);
     }
+
+    addMedia(id, data) {
+        return API.post(`/projects/${id}/media`, data);
+    }
+    deleteMedia(id, mediaId) {
+        return API.delete(`/projects/${id}/media/${mediaId}`);
+    }
+    moveMedia(id, mediaId, down) {
+        return API.put(`/projects/${id}/media/${mediaId}`, null, {
+            params: { down: down ? "true" : "false" },
+        });
+    }
 }
 
 export default new ProjectService();

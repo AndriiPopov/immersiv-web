@@ -17,7 +17,6 @@ class AuthService {
     }
 
     logout() {
-        console.log("logout");
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         localStorage.removeItem("expiresAt");

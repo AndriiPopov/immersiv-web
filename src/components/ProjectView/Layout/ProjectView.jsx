@@ -13,7 +13,8 @@ import { Loading } from "components/ProjectView/Components/Loading/Loading";
 const ProjectView = (props) => {
     const { project, constant } = props;
     const [width, height] = useWindowSize();
-    const isMobile = isMobileAgent || width < 1200 || height < 700;
+    // const isMobile = isMobileAgent || width < 1200 || height < 700;
+    const isMobile = true;
     const [loaded, setLoaded] = useState(false);
     const [status, setStatus] = useState(false);
 

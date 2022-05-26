@@ -8,6 +8,7 @@ import Login from "pages/Login";
 import ProjectDetails from "pages/ProjectDetails";
 import Projects from "pages/Projects";
 import PropertiesAdmin from "pages/PropertiesAdmin";
+import MediaAdmin from "pages/MediaAdmin";
 import PropertiesClient from "pages/PropertiesClient";
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
@@ -49,6 +50,11 @@ function App() {
                             exact
                             path="/admin/projects/:id/properties"
                             element={<PropertiesAdmin />}
+                        ></Route>
+                        <Route
+                            exact
+                            path="/admin/projects/:id/media"
+                            element={<MediaAdmin />}
                         ></Route>
                         <Route
                             exact

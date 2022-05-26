@@ -14,7 +14,6 @@ const UserProvider = ({ children }) => {
     const [isInitiated, setIsInitiated] = useState(false);
 
     useEffect(() => {
-        console.log("token on startup", localStorage.getItem("token"));
         if (localStorage.getItem("token")) {
             setIsLoggedIn(true);
             setAuthData(() => getTokenData(localStorage.getItem("token")));
@@ -42,12 +41,12 @@ const UserProvider = ({ children }) => {
 
         setAuthData(() => getTokenData(token));
         localStorage.setItem("token", token);
-        console.log("token after login", localStorage.getItem("token"));
     };
 
     const logout = () => {
         setAuthData(null);
         setIsLoggedIn(false);
+
         authService.logout();
     };
 

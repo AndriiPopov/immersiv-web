@@ -125,6 +125,7 @@ const AnalyticClient = (props) => {
                         style={{
                             flex: 1,
                             overflow: "auto",
+                            paddingTop: "100px",
                             padding: "16px",
 
                             width: "100%",

@@ -55,7 +55,12 @@ const PropertiesClient = (props) => {
                     onBack={() => setOpenDrawer(true)}
                     backIcon={<MenuOutlined />}
                     title={"Appartments"}
-                    style={{ boxShadow: "1px 1px 10px 1px #ccc" }}
+                    style={{
+                        boxShadow: "1px 1px 10px 1px #ccc",
+                        position: "fixed",
+                        zIndex: 100,
+                        width: "100%",
+                    }}
                 />
 
                 <Content
@@ -63,6 +68,7 @@ const PropertiesClient = (props) => {
                         flex: 1,
                         overflow: "auto",
                         padding: "16px",
+                        paddingTop: "100px",
                         maxWidth: "1200px",
                         width: "100%",
                         margin: "auto",
