@@ -13,6 +13,7 @@ import gaService from "services/ga.service";
 import toast from "react-hot-toast";
 import { ChartItem } from "components/DashboardItem/DataItems";
 import useLoginCheck from "hooks/useLoginCheck";
+import { useUser } from "context/UserContext";
 
 const AnalyticClient = (props) => {
     const { id } = useParams();
@@ -27,8 +28,19 @@ const AnalyticClient = (props) => {
         moment().format(),
     ]);
     const navigate = useNavigate();
+    const { logout, isLoggedIn, authData } = useUser();
 
-    useLoginCheck();
+    useEffect(() => {
+        if (
+            !isLoggedIn ||
+            (!authData?.super &&
+                id.toString() !== authData?.projectId.toString())
+        ) {
+            logout();
+            navigate("/login");
+            return null;
+        }
+    }, [isLoggedIn, authData?.super, authData?.projectId]);
 
     useEffect(() => {
         projectService.getProject(id).then((response) => {

@@ -74,8 +74,7 @@ const MediaAdmin = (props) => {
     }) => {
         try {
             const res = await utilsService.signUrl();
-            console.log("res", res);
-            console.log(file);
+
             axios
                 .put(res.data.signedRequest, file, {
                     headers: {
@@ -83,11 +82,11 @@ const MediaAdmin = (props) => {
                     },
                 })
                 .then((s3res) => {
-                    console.log(res.data.signedRequest);
                     if (formRef.current) {
                         formRef.current.setFieldsValue({
                             ...formRef.current.values,
                             url: res.data.url,
+                            thumbnail: res.data.thumbnail,
                         });
                         onSuccess(data.response, file);
                     }
@@ -234,28 +233,22 @@ const MediaAdmin = (props) => {
                                 </Form.Item>
                                 <Form.Item
                                     name="name"
-                                    rules={[
-                                        {
-                                            required: true,
-                                        },
-                                    ]}
+                                    rules={[{ required: true }]}
                                 >
                                     <Input placeholder="Name" />
                                 </Form.Item>
                                 <Form.Item
                                     name="url"
-                                    rules={[
-                                        {
-                                            required: true,
-                                        },
-                                    ]}
+                                    rules={[{ required: true }]}
                                 >
                                     <Input placeholder="Url/Video id" />
+                                </Form.Item>
+                                <Form.Item name="thumbnail" hidden>
+                                    <Input placeholder="Thumbnail" />
                                 </Form.Item>
                                 <Form.Item>
                                     <Upload
                                         accept="image/*"
-                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                                         listType="picture"
                                         maxCount={1}
                                         customRequest={customUpload}
