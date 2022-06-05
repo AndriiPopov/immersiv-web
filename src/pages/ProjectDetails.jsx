@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import ProjectFormFields from "components/ProjectFormFields";
 import useLoginCheck from "hooks/useLoginCheck";
+import copy from "copy-to-clipboard";
 
 const ProjectDetails = (props) => {
     const [project, setProject] = useState(null);
@@ -31,6 +32,16 @@ const ProjectDetails = (props) => {
         const response = await projectService.saveProject(project.id, values);
         if (response.data) toast.success("Saved");
     };
+
+    const projectAddress = project?.url
+        ? `https://tour.immersiv.com.au/p/${project.url}`
+        : "not set yet";
+    const galleryAddress = project?.url
+        ? `https://tour.immersiv.com.au/gallery?project=${project.url}`
+        : "not set yet";
+    const propertiesAddress = project?.url
+        ? `https://tour.immersiv.com.au/api/properties/properties-ue/${project.url}`
+        : "not set yet";
 
     return (
         <LayoutHOC loading={!project}>
@@ -66,9 +77,6 @@ const ProjectDetails = (props) => {
                 >
                     {project && (
                         <>
-                            <Typography.Title>
-                                Project id: {project.id}
-                            </Typography.Title>
                             <Button
                                 onClick={() => navigate(`/p-admin/${id}`)}
                                 style={{ margin: "16px" }}
@@ -95,6 +103,36 @@ const ProjectDetails = (props) => {
                             >
                                 Manage media
                             </Button>
+                            <Typography.Paragraph>
+                                {`The project full url is ${projectAddress}`}
+                                <Button
+                                    onClick={() => copy(projectAddress)}
+                                    type="link"
+                                >
+                                    Copy
+                                </Button>
+                            </Typography.Paragraph>
+
+                            <Typography.Paragraph>
+                                {`The project gallery url is ${galleryAddress}`}{" "}
+                                <Button
+                                    onClick={() => copy(galleryAddress)}
+                                    type="link"
+                                >
+                                    Copy
+                                </Button>
+                            </Typography.Paragraph>
+
+                            <Typography.Paragraph>
+                                {`The project properties api link ${propertiesAddress}`}{" "}
+                                <Button
+                                    onClick={() => copy(propertiesAddress)}
+                                    type="link"
+                                >
+                                    Copy
+                                </Button>
+                            </Typography.Paragraph>
+
                             <Form
                                 ref={formRef}
                                 onFinish={onFinish}

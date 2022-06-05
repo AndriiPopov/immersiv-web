@@ -180,7 +180,7 @@ const PropertiesTable = (props) => {
             dataIndex: "Price",
             sorter: (a, b) => a.Price - b.Price,
             sortDirections: ["descend", "ascend"],
-            editable: admin,
+            editable: true,
             inputType: "number",
             width: 100,
         },

@@ -25,6 +25,7 @@ const ProjectFormFields = () => {
                         message: "Please add url!",
                     },
                 ]}
+                extra="This is only what should appear at the end of url, for example 'best-hotel', 'sky_mall'... Do not put https://tour.immersiv.com.au/ here!"
             >
                 <Input placeholder="Url" />
             </Form.Item>
