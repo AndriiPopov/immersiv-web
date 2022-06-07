@@ -33,6 +33,7 @@
         "socket.io-client": "^4.4.1",
         "string-humanize": "^1.0.1",
         "use-async-effect": "^2.2.5",
+        "video.js": "^7.19.2",
         "web-vitals": "^0.2.4"
     },
     "scripts": {

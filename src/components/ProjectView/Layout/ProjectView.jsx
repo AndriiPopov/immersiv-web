@@ -35,7 +35,7 @@ const ProjectView = (props) => {
                                 setStatus={setStatus}
                                 project={project}
                             />
-                            {isMobile && (
+                            {!isMobile && (
                                 <>
                                     {loaded && (
                                         <img

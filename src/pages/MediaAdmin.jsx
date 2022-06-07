@@ -23,6 +23,8 @@ import YouTube from "react-youtube";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import utilsService from "services/utils.service";
+import videojs from "video.js";
+import "video.js/dist/video-js.css";
 
 const MediaAdmin = (props) => {
     const { id } = useParams();
@@ -73,13 +75,15 @@ const MediaAdmin = (props) => {
         withCredentials,
     }) => {
         try {
-            const res = await utilsService.signUrl();
+            console.log(formRef.current.getFieldValue("type"));
+            const isVideo = formRef.current.getFieldValue("type") === "video";
+            const res = await utilsService.signUrl(isVideo);
 
             axios
                 .put(res.data.signedRequest, file, {
-                    headers: {
-                        "Content-Type": file.type,
-                    },
+                    // headers: {
+                    //     "Content-Type": file.type,
+                    // },
                 })
                 .then((s3res) => {
                     if (formRef.current) {
@@ -176,10 +180,32 @@ const MediaAdmin = (props) => {
                                         ]}
                                         extra={
                                             item.type === "video" ? (
-                                                <YouTube
-                                                    videoId={item.url}
-                                                    className="youtubeContainer"
-                                                />
+                                                <video
+                                                    id="my-player"
+                                                    class="video-js"
+                                                    controls
+                                                    preload="auto"
+                                                    data-setup="{}"
+                                                >
+                                                    <source
+                                                        src={item.url}
+                                                        type="video/mp4"
+                                                    ></source>
+                                                    <p class="vjs-no-js">
+                                                        To view this video
+                                                        please enable
+                                                        JavaScript, and consider
+                                                        upgrading to a web
+                                                        browser that
+                                                        <a
+                                                            href="https://videojs.com/html5-video-support/"
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                        >
+                                                            supports HTML5 video
+                                                        </a>
+                                                    </p>
+                                                </video>
                                             ) : (
                                                 <img
                                                     width="100%"
@@ -241,14 +267,14 @@ const MediaAdmin = (props) => {
                                     name="url"
                                     rules={[{ required: true }]}
                                 >
-                                    <Input placeholder="Url/Video id" />
+                                    <Input placeholder="Url" readOnly />
                                 </Form.Item>
                                 <Form.Item name="thumbnail" hidden>
                                     <Input placeholder="Thumbnail" />
                                 </Form.Item>
                                 <Form.Item>
                                     <Upload
-                                        accept="image/*"
+                                        accept="image/*,video/*"
                                         listType="picture"
                                         maxCount={1}
                                         customRequest={customUpload}
