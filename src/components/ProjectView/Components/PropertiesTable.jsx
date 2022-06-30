@@ -15,6 +15,7 @@ import propertyService from "services/property.service";
 const { Option } = Select;
 
 const transferOrientationToObject = (data) => {
+    if (!data.Orientation) return data;
     const o = {};
     if (data.Orientation.indexOf("N") !== -1) o.N = true;
     else if (data.Orientation.indexOf("S") !== -1) o.S = true;
@@ -99,6 +100,8 @@ const EditableCell = ({
     );
 };
 
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
 const PropertiesTable = (props) => {
     const { properties, project, setProperties, admin, setEditModalOpen } =
         props;
@@ -120,7 +123,6 @@ const PropertiesTable = (props) => {
     const save = async (key) => {
         try {
             const values = await form.validateFields();
-
             const response = await propertyService.saveProperty(
                 project.id,
                 key,
@@ -165,6 +167,7 @@ const PropertiesTable = (props) => {
             editable: true,
             inputType: "availability",
             width: 100,
+            render: (_, property) => capitalize(property.Availability),
         },
         {
             title: "Surface",

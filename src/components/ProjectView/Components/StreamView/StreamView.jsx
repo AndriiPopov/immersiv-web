@@ -79,17 +79,17 @@ const StreamView = (props) => {
     };
     useAsyncEffect(async () => {
         if (project.projectId) {
-            logger.info("Initializing available models: " + project.projectId);
+            // logger.info("Initializing available models: " + project.projectId);
             try {
                 await platform.useAnonymousCredentials(project.projectId);
                 await platform.connect();
-                logger.info("Agent Connected: " + platform.agent.id);
+                // logger.info("Agent Connected: " + platform.agent.id);
                 streamerOptions.iceServers =
                     platform.agent.serviceCredentials.iceServers;
                 streamerOptions.forceRelay = project.ForceRelay;
                 const models = await platform.getModels();
                 setAvailableModels(models);
-                logger.debug("Available models", models);
+                // logger.debug("Available models", models);
             } catch (err) {
                 logger.error(err);
             }
@@ -128,7 +128,7 @@ const StreamView = (props) => {
 
     // Log status messages
     useEffect(() => {
-        logger.info("Status", status, streamerStatus);
+        // logger.info("Status", status, streamerStatus);
         props.setStatus(status);
     }, [status, streamerStatus]);
     // Notify user of missing or errors in configuration

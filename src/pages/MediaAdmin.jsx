@@ -75,7 +75,6 @@ const MediaAdmin = (props) => {
         withCredentials,
     }) => {
         try {
-            console.log(formRef.current.getFieldValue("type"));
             const isVideo = formRef.current.getFieldValue("type") === "video";
             const res = await utilsService.signUrl(isVideo);
 
