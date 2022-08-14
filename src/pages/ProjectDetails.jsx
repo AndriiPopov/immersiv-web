@@ -29,6 +29,7 @@ const ProjectDetails = (props) => {
     useLoginCheck();
 
     const onFinish = async (values) => {
+        console.log(values);
         const response = await projectService.saveProject(project.id, values);
         if (response.data) toast.success("Saved");
     };
@@ -42,6 +43,22 @@ const ProjectDetails = (props) => {
     const propertiesAddress = project?.url
         ? `https://tour.immersiv.com.au/api/properties/properties-ue/${project.url}`
         : "not set yet";
+
+    const setFieldsValue = (val) => {
+        if (formRef.current) {
+            formRef.current.setFieldsValue({
+                ...formRef.current.getFieldsValue(),
+                ...val,
+            });
+        }
+    };
+
+    const getFieldValue = (name) => {
+        if (formRef.current) {
+            return formRef.current.getFieldValue(name);
+        }
+        return "";
+    };
 
     return (
         <LayoutHOC loading={!project}>
@@ -145,7 +162,11 @@ const ProjectDetails = (props) => {
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 16 }}
                             >
-                                <ProjectFormFields />
+                                <ProjectFormFields
+                                    setFieldsValue={setFieldsValue}
+                                    getFieldValue={getFieldValue}
+                                />
+
                                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                                     <Button
                                         onClick={() => {

@@ -25,6 +25,7 @@ import axios from "axios";
 import utilsService from "services/utils.service";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
+import uploadMedia from "helpers/uploadMedia";
 
 const MediaAdmin = (props) => {
     const { id } = useParams();
@@ -63,46 +64,15 @@ const MediaAdmin = (props) => {
         }
     };
 
-    const customUpload = async ({
-        action,
-        data,
-        file,
-        filename,
-        headers,
-        onError,
-        onProgress,
-        onSuccess,
-        withCredentials,
-    }) => {
-        try {
-            const isVideo = formRef.current.getFieldValue("type") === "video";
-            const res = await utilsService.signUrl(isVideo);
-
-            axios
-                .put(res.data.signedRequest, file, {
-                    // headers: {
-                    //     "Content-Type": file.type,
-                    // },
-                })
-                .then((s3res) => {
-                    if (formRef.current) {
-                        formRef.current.setFieldsValue({
-                            ...formRef.current.values,
-                            url: res.data.url,
-                            thumbnail: res.data.thumbnail,
-                        });
-                        onSuccess(data.response, file);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                    onError();
-                });
-        } catch (error) {
-            onError();
-            toast.error(error.message);
+    const customUpload = uploadMedia((values) => {
+        if (formRef.current) {
+            formRef.current.setFieldsValue({
+                ...formRef.current.values,
+                ...values,
+            });
         }
-    };
+    }, formRef.current.getFieldValue("type") === "video");
+
     return (
         <LayoutHOC>
             <Layout

@@ -18,7 +18,7 @@ const statusMessage = {
 let interval = null;
 
 export const Loading = (props) => {
-    const { loaded, status } = props;
+    const { loaded, status, project } = props;
     const [message, setMessage] = useState(null);
     const [nextPercentage, setNextPercentage] = useState(0);
     const [percentage, setPercentage] = useState(0);
@@ -56,7 +56,14 @@ export const Loading = (props) => {
         };
     }, [nextPercentage]);
 
-    return loaded ? null : (
+    const [isVideoVisible, setIsVideoVisible] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => setIsVideoVisible(true), 20000);
+    }, []);
+
+    // loaded ? null :
+    return (
         <div className={styles.wrap}>
             <img
                 src="/images/logo-white.png"
@@ -64,23 +71,58 @@ export const Loading = (props) => {
                 className={styles.logo}
             />
             <div className={styles.center}>
-                <div className={styles.video}>
-                    <video
-                        autoPlay
-                        loop
-                        muted
-                        style={{ objectFit: "contain" }}
-                        playsinline
+                {!isVideoVisible ? (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            flex: 1,
+                            alignItems: "center",
+                        }}
                     >
-                        <source
-                            src="https://immersivmedia.s3.ap-southeast-2.amazonaws.com/website-media/navigation.mp4"
-                            type="video/mp4"
+                        <img
+                            src={project.clientLogo}
+                            alt="logo"
+                            style={{ maxHeight: "50px", marginBottom: "36px" }}
                         />
-                    </video>
-                </div>
+                        {project.projectLogo ? (
+                            <img
+                                src={project.projectLogo}
+                                alt="logo"
+                                style={{
+                                    maxHeight: "50px",
+                                    marginBottom: "36px",
+                                }}
+                            />
+                        ) : (
+                            <h6 style={{ textAlign: "center" }}>
+                                {project.projectName}
+                            </h6>
+                        )}
+                        <p style={{ textAlign: "center" }}>
+                            {project.description}
+                        </p>
+                    </div>
+                ) : (
+                    <div className={styles.video}>
+                        <video
+                            autoPlay
+                            loop
+                            muted
+                            style={{ objectFit: "contain" }}
+                            playsInline
+                        >
+                            <source
+                                src="https://immersivmedia.s3.ap-southeast-2.amazonaws.com/website-media/navigation.mp4"
+                                type="video/mp4"
+                            />
+                        </video>
+                    </div>
+                )}
             </div>
             {!!nextPercentage && (
                 <Progress
+                    size="small"
                     type="circle"
                     percent={percentage}
                     style={{ marginBottom: 20 }}
@@ -101,7 +143,7 @@ export const Loading = (props) => {
                     strokeWidth={3}
                 />
             )}
-            <div style={{ paddingBottom: "100px" }}>
+            <div style={{ marginBottom: "50px" }}>
                 {message?.text || "Initializing..."}
             </div>
         </div>

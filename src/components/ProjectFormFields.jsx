@@ -1,7 +1,42 @@
-import { Button, Checkbox, Form, Input, Switch } from "antd";
-import React from "react";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Image, Input, Switch, Upload } from "antd";
+import uploadMedia from "helpers/uploadMedia";
+import React, { useEffect, useState } from "react";
 
-const ProjectFormFields = () => {
+const Logo = (props) => {
+    const customUploadClientLogo = uploadMedia((values) => {
+        props.setFieldsValue({ [props.id]: values.thumbnail });
+    });
+    const [image, setImage] = useState("");
+    useEffect(() => {
+        setTimeout(() => setImage(props[props.id]), 5000);
+    }, [props[props.id]]);
+    return (
+        <>
+            {image === props[props.id] ? (
+                <Image src={image} style={{ maxHeight: "50px" }} />
+            ) : (
+                <LoadingOutlined />
+            )}
+            <div style={{ marginTop: "10px" }}>
+                <Upload
+                    listType="picture-card"
+                    customRequest={customUploadClientLogo}
+                    showUploadList={false}
+                    maxCount={1}
+                    getValueFromEvent={() => {}}
+                >
+                    <div>
+                        <PlusOutlined />
+                        <div style={{ marginTop: 8 }}>Upload</div>
+                    </div>
+                </Upload>
+            </div>
+        </>
+    );
+};
+
+const ProjectFormFields = ({ setFieldsValue, getFieldValue }) => {
     return (
         <>
             <Form.Item
@@ -54,6 +89,35 @@ const ProjectFormFields = () => {
                 ]}
             >
                 <Input placeholder="Model id" />
+            </Form.Item>
+
+            <Form.Item
+                label="Client logo"
+                valuePropName="clientLogo"
+                name="clientLogo"
+            >
+                <Logo setFieldsValue={setFieldsValue} />
+            </Form.Item>
+            <Form.Item
+                label="Project logo"
+                valuePropName="projectLogo"
+                name="projectLogo"
+            >
+                <Logo setFieldsValue={setFieldsValue} />
+            </Form.Item>
+            <Form.Item
+                name="projectName"
+                label="Project name"
+                extra="This text will appear on the screen where the project is being loaded if there is no logo"
+            >
+                <Input placeholder="projectName" />
+            </Form.Item>
+            <Form.Item
+                name="description"
+                label="Description"
+                extra="This text will appear on the screen where the project is being loaded"
+            >
+                <Input placeholder="Description" />
             </Form.Item>
 
             <Form.Item name="adminEmail" label="Client login">

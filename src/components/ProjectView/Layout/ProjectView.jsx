@@ -120,7 +120,7 @@ const ProjectView = (props) => {
                     </div>
                 )}
             </div>
-            <Loading loaded={loaded} status={status} />
+            <Loading loaded={loaded} status={status} project={project} />
         </>
     );
 };
