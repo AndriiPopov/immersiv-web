@@ -15,7 +15,7 @@ import copy from "copy-to-clipboard";
 const ProjectDetails = (props) => {
     const [project, setProject] = useState(null);
 
-    const formRef = useRef(null);
+    const [form] = Form.useForm();
 
     const { id } = useParams();
 
@@ -45,21 +45,22 @@ const ProjectDetails = (props) => {
         : "not set yet";
 
     const setFieldsValue = (val) => {
-        if (formRef.current) {
-            formRef.current.setFieldsValue({
-                ...formRef.current.getFieldsValue(),
+        if (form) {
+            form.setFieldsValue({
+                ...form.getFieldsValue(),
                 ...val,
             });
         }
     };
 
-    const getFieldValue = (name) => {
-        if (formRef.current) {
-            return formRef.current.getFieldValue(name);
-        }
-        return "";
-    };
-
+    const description = Form.useWatch("description", form);
+    const projectName = Form.useWatch("projectName", form);
+    const clientLogo = Form.useWatch("clientLogo", form);
+    const clientLogoMaxWidth = Form.useWatch("clientLogoMaxWidth", form);
+    const clientLogoMaxHeight = Form.useWatch("clientLogoMaxHeight", form);
+    const projectLogo = Form.useWatch("projectLogo", form);
+    const projectLogoMaxWidth = Form.useWatch("projectLogoMaxWidth", form);
+    const projectLogoMaxHeight = Form.useWatch("projectLogoMaxHeight", form);
     return (
         <LayoutHOC loading={!project}>
             <Layout
@@ -151,7 +152,7 @@ const ProjectDetails = (props) => {
                             </Typography.Paragraph>
 
                             <Form
-                                ref={formRef}
+                                form={form}
                                 onFinish={onFinish}
                                 style={{
                                     padding: " 16px",
@@ -164,14 +165,13 @@ const ProjectDetails = (props) => {
                             >
                                 <ProjectFormFields
                                     setFieldsValue={setFieldsValue}
-                                    getFieldValue={getFieldValue}
                                 />
 
                                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                                     <Button
                                         onClick={() => {
-                                            if (formRef.current)
-                                                formRef.current.resetFields();
+                                            if (form.current)
+                                                form.current.resetFields();
                                         }}
                                         style={{ width: "100%" }}
                                     >
@@ -179,6 +179,48 @@ const ProjectDetails = (props) => {
                                     </Button>
                                 </Form.Item>
                             </Form>
+                            <div>
+                                <div>Project details preview</div>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        flex: 1,
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <img
+                                        src={clientLogo}
+                                        alt="logo"
+                                        style={{
+                                            maxHeight:
+                                                clientLogoMaxHeight + "px",
+                                            maxWidth: clientLogoMaxWidth + "px",
+                                            marginBottom: "36px",
+                                        }}
+                                    />
+                                    {projectLogo ? (
+                                        <img
+                                            src={projectLogo}
+                                            alt="logo"
+                                            style={{
+                                                maxHeight:
+                                                    projectLogoMaxHeight + "px",
+                                                maxWidth:
+                                                    projectLogoMaxWidth + "px",
+                                                marginBottom: "36px",
+                                            }}
+                                        />
+                                    ) : (
+                                        <h6 style={{ textAlign: "center" }}>
+                                            {projectName}
+                                        </h6>
+                                    )}
+                                    <p style={{ textAlign: "center" }}>
+                                        {description}
+                                    </p>
+                                </div>
+                            </div>
                         </>
                     )}
                 </Content>

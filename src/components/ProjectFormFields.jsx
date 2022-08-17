@@ -1,12 +1,13 @@
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Image, Input, Switch, Upload } from "antd";
+import TextArea from "antd/lib/input/TextArea";
 import uploadMedia from "helpers/uploadMedia";
 import React, { useEffect, useState } from "react";
 
 const Logo = (props) => {
     const customUploadClientLogo = uploadMedia((values) => {
-        props.setFieldsValue({ [props.id]: values.thumbnail });
-    });
+        props.setFieldsValue({ [props.id]: values.url });
+    }, props.isVideo);
     const [image, setImage] = useState("");
     useEffect(() => {
         setTimeout(() => setImage(props[props.id]), 5000);
@@ -14,29 +15,48 @@ const Logo = (props) => {
     return (
         <>
             {image === props[props.id] ? (
-                <Image src={image} style={{ maxHeight: "50px" }} />
+                props.isVideo ? (
+                    <video
+                        id="my-player"
+                        class="video-js"
+                        controls
+                        preload="auto"
+                        data-setup="{}"
+                    >
+                        <source src={image} type="video/mp4"></source>
+                        <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and
+                            consider upgrading to a web browser that
+                            <a
+                                href="https://videojs.com/html5-video-support/"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                supports HTML5 video
+                            </a>
+                        </p>
+                    </video>
+                ) : (
+                    <Image src={image} style={{ maxHeight: "50px" }} />
+                )
             ) : (
                 <LoadingOutlined />
             )}
             <div style={{ marginTop: "10px" }}>
                 <Upload
-                    listType="picture-card"
                     customRequest={customUploadClientLogo}
                     showUploadList={false}
                     maxCount={1}
                     getValueFromEvent={() => {}}
                 >
-                    <div>
-                        <PlusOutlined />
-                        <div style={{ marginTop: 8 }}>Upload</div>
-                    </div>
+                    <Button>Change</Button>
                 </Upload>
             </div>
         </>
     );
 };
 
-const ProjectFormFields = ({ setFieldsValue, getFieldValue }) => {
+const ProjectFormFields = ({ setFieldsValue }) => {
     return (
         <>
             <Form.Item
@@ -92,32 +112,32 @@ const ProjectFormFields = ({ setFieldsValue, getFieldValue }) => {
             </Form.Item>
 
             <Form.Item
-                label="Client logo"
-                valuePropName="clientLogo"
-                name="clientLogo"
+                label="Custom background"
+                name="backgroundOn"
+                valuePropName="checked"
+            >
+                <Checkbox />
+            </Form.Item>
+            <Form.Item
+                label="Background video"
+                name="backgroundTypeVideo"
+                valuePropName="checked"
+            >
+                <Checkbox />
+            </Form.Item>
+            <Form.Item
+                label="Background video"
+                valuePropName="backgroundVideo"
+                name="backgroundVideo"
+            >
+                <Logo setFieldsValue={setFieldsValue} isVideo />
+            </Form.Item>
+            <Form.Item
+                label="Background image"
+                valuePropName="backgroundImage"
+                name="backgroundImage"
             >
                 <Logo setFieldsValue={setFieldsValue} />
-            </Form.Item>
-            <Form.Item
-                label="Project logo"
-                valuePropName="projectLogo"
-                name="projectLogo"
-            >
-                <Logo setFieldsValue={setFieldsValue} />
-            </Form.Item>
-            <Form.Item
-                name="projectName"
-                label="Project name"
-                extra="This text will appear on the screen where the project is being loaded if there is no logo"
-            >
-                <Input placeholder="projectName" />
-            </Form.Item>
-            <Form.Item
-                name="description"
-                label="Description"
-                extra="This text will appear on the screen where the project is being loaded"
-            >
-                <Input placeholder="Description" />
             </Form.Item>
 
             <Form.Item name="adminEmail" label="Client login">
@@ -162,6 +182,71 @@ const ProjectFormFields = ({ setFieldsValue, getFieldValue }) => {
                 label="Published"
             >
                 <Checkbox />
+            </Form.Item>
+
+            <Form.Item
+                label="Project details on"
+                name="projectDetailsOn"
+                valuePropName="checked"
+            >
+                <Checkbox />
+            </Form.Item>
+            <Form.Item
+                label="Project details duration"
+                name="projectDetailsDuraton"
+            >
+                <Input type="number" />
+            </Form.Item>
+
+            <Form.Item
+                label="Client logo"
+                valuePropName="clientLogo"
+                name="clientLogo"
+            >
+                <Logo setFieldsValue={setFieldsValue} />
+            </Form.Item>
+            <Form.Item label="Client logo max width" name="clientLogoMaxWidth">
+                <Input type="number" />
+            </Form.Item>
+            <Form.Item
+                label="Client logo max height"
+                name="clientLogoMaxHeight"
+            >
+                <Input type="number" />
+            </Form.Item>
+
+            <Form.Item
+                label="Project logo"
+                valuePropName="projectLogo"
+                name="projectLogo"
+            >
+                <Logo setFieldsValue={setFieldsValue} />
+            </Form.Item>
+            <Form.Item
+                label="Project logo max width"
+                name="projectLogoMaxWidth"
+            >
+                <Input type="number" />
+            </Form.Item>
+            <Form.Item
+                label="Project logo max height"
+                name="projectLogoMaxHeight"
+            >
+                <Input type="number" />
+            </Form.Item>
+            <Form.Item
+                name="projectName"
+                label="Project name"
+                extra="This text will appear on the screen where the project is being loaded if there is no logo"
+            >
+                <Input placeholder="projectName" />
+            </Form.Item>
+            <Form.Item
+                name="description"
+                label="Description"
+                extra="This text will appear on the screen where the project is being loaded"
+            >
+                <TextArea placeholder="Description" rows={4} />
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

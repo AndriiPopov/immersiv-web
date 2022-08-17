@@ -59,51 +59,92 @@ export const Loading = (props) => {
     const [isVideoVisible, setIsVideoVisible] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => setIsVideoVisible(true), 20000);
+        setTimeout(
+            () => setIsVideoVisible(true),
+            project.projectDetailsDuraton * 1000 || 20000
+        );
     }, []);
 
-    // loaded ? null :
-    return (
-        <div className={styles.wrap}>
+    console.log(project);
+
+    return loaded ? null : (
+        <div
+            className={styles.wrap}
+            style={
+                project.backgroundOn && !project.backgroundTypeVideo
+                    ? {
+                          backgroundImage: `url("${project.backgroundImage}")`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                      }
+                    : undefined
+            }
+        >
+            {project.backgroundOn && project.backgroundTypeVideo ? (
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    className={styles.backgroundVideo}
+                    playsInline
+                >
+                    <source src={project.backgroundVideo} type="video/mp4" />
+                </video>
+            ) : null}
             <img
                 src="/images/logo-white.png"
                 alt="logo"
                 className={styles.logo}
             />
             <div className={styles.center}>
-                {!isVideoVisible ? (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            flex: 1,
-                            alignItems: "center",
-                        }}
-                    >
-                        <img
-                            src={project.clientLogo}
-                            alt="logo"
-                            style={{ maxHeight: "50px", marginBottom: "36px" }}
-                        />
-                        {project.projectLogo ? (
+                <div>
+                    {!isVideoVisible && project.projectDetailsOn && (
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                            }}
+                        >
                             <img
-                                src={project.projectLogo}
+                                src={project.clientLogo}
                                 alt="logo"
                                 style={{
-                                    maxHeight: "50px",
+                                    maxHeight:
+                                        project.clientLogoMaxHeight + "px",
+                                    maxWidth: project.clientLogoMaxWidth + "px",
                                     marginBottom: "36px",
                                 }}
                             />
-                        ) : (
-                            <h6 style={{ textAlign: "center" }}>
-                                {project.projectName}
-                            </h6>
-                        )}
-                        <p style={{ textAlign: "center" }}>
-                            {project.description}
-                        </p>
-                    </div>
-                ) : (
+                            {project.projectLogo ? (
+                                <img
+                                    src={project.projectLogo}
+                                    alt="logo"
+                                    style={{
+                                        maxHeight:
+                                            project.projectLogoMaxHeight + "px",
+                                        maxWidth:
+                                            project.projectLogoMaxWidth + "px",
+                                        marginBottom: "36px",
+                                    }}
+                                />
+                            ) : (
+                                <h6 style={{ textAlign: "center" }}>
+                                    {project.projectName}
+                                </h6>
+                            )}
+                            <p
+                                style={{
+                                    textAlign: "center",
+                                    marginBottom: "36px",
+                                }}
+                            >
+                                {project.description}
+                            </p>
+                        </div>
+                    )}
+
                     <div className={styles.video}>
                         <video
                             autoPlay
@@ -118,12 +159,15 @@ export const Loading = (props) => {
                             />
                         </video>
                     </div>
-                )}
+                </div>
+            </div>
+            <div style={{ zIndex: 1 }}>
+                {message?.text || "Initializing..."}
             </div>
             {!!nextPercentage && (
                 <Progress
                     size="small"
-                    type="circle"
+                    type="line"
                     percent={percentage}
                     style={{ marginBottom: 20 }}
                     trailColor="black"
@@ -143,9 +187,6 @@ export const Loading = (props) => {
                     strokeWidth={3}
                 />
             )}
-            <div style={{ marginBottom: "50px" }}>
-                {message?.text || "Initializing..."}
-            </div>
         </div>
     );
 };

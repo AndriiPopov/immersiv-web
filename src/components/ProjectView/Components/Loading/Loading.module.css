@@ -23,16 +23,34 @@
     box-sizing: border-box;
     position: relative;
     display: flex;
+    max-width: 800px;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: center;
+}
+.center > div {
+    box-sizing: border-box;
+    position: relative;
     width: 100%;
     align-items: center;
-    justify-content: center;
     max-width: 800px;
+    flex-direction: column;
+    overflow: auto;
 }
 
 .video {
-    position: absolute;
-    inset: 0px;
+    /* position: absolute; */
+    /* inset: 0px; */
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.backgroundVideo {
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
 }

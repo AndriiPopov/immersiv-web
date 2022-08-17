@@ -206,6 +206,24 @@ const PropertiesTable = (props) => {
             width: 100,
         },
         {
+            title: "Frontage",
+            dataIndex: "Frontage",
+            sorter: (a, b) => a.Frontage - b.Frontage,
+            sortDirections: ["descend", "ascend"],
+            editable: admin,
+            inputType: "number",
+            width: 100,
+        },
+        {
+            title: "Depth",
+            dataIndex: "Depth",
+            sorter: (a, b) => a.Depth - b.Depth,
+            sortDirections: ["descend", "ascend"],
+            editable: admin,
+            inputType: "number",
+            width: 100,
+        },
+        {
             title: "Orientation",
             dataIndex: "Orientation",
 
