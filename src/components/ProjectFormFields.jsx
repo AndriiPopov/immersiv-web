@@ -5,9 +5,13 @@ import uploadMedia from "helpers/uploadMedia";
 import React, { useEffect, useState } from "react";
 
 const Logo = (props) => {
-    const customUploadClientLogo = uploadMedia((values) => {
-        props.setFieldsValue({ [props.id]: values.url });
-    }, props.isVideo);
+    const customUploadClientLogo = uploadMedia(
+        (values) => {
+            props.setFieldsValue({ [props.id]: values.url });
+        },
+        props.isVideo,
+        true
+    );
     const [image, setImage] = useState("");
     useEffect(() => {
         setTimeout(() => setImage(props[props.id]), 5000);

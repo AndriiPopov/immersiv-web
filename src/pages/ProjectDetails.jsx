@@ -29,7 +29,6 @@ const ProjectDetails = (props) => {
     useLoginCheck();
 
     const onFinish = async (values) => {
-        console.log(values);
         const response = await projectService.saveProject(project.id, values);
         if (response.data) toast.success("Saved");
     };

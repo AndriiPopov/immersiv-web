@@ -58,14 +58,12 @@ export const Loading = (props) => {
 
     const [isVideoVisible, setIsVideoVisible] = useState(false);
 
-    useEffect(() => {
-        setTimeout(
-            () => setIsVideoVisible(true),
-            project.projectDetailsDuraton * 1000 || 20000
-        );
-    }, []);
-
-    console.log(project);
+    // useEffect(() => {
+    //     setTimeout(
+    //         () => setIsVideoVisible(true),
+    //         project.projectDetailsDuraton * 1000 || 20000
+    //     );
+    // }, []);
 
     return loaded ? null : (
         <div
@@ -92,6 +90,13 @@ export const Loading = (props) => {
                     <source src={project.backgroundVideo} type="video/mp4" />
                 </video>
             ) : null}
+            <div
+                style={{
+                    background: "rgba(0,0,0,.5)",
+                    inset: "0px",
+                    position: "absolute",
+                }}
+            />
             <img
                 src="/images/logo-white.png"
                 alt="logo"
@@ -162,11 +167,13 @@ export const Loading = (props) => {
                 </div>
             </div>
             <div style={{ zIndex: 1 }}>
-                {message?.text || "Initializing..."}
+                {message?.text
+                    ? `${message?.text} ${percentage}%`
+                    : "Initializing..."}
             </div>
             {!!nextPercentage && (
                 <Progress
-                    size="small"
+                    // size="small"
                     type="line"
                     percent={percentage}
                     style={{ marginBottom: 20 }}
@@ -175,10 +182,13 @@ export const Loading = (props) => {
                         "0%": "#108ee9",
                         "100%": "#87d068",
                     }}
+                    strokeWidth={30}
+                    showInfo={false}
                     format={
                         percentage !== 100
                             ? (percent) => (
                                   <span style={{ color: "white" }}>
+                                      {message?.text || "Initializing..."}
                                       {percent}%
                                   </span>
                               )

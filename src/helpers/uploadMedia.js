@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import utilsService from "services/utils.service";
 
 const uploadMedia =
-    (cb, isVideo) =>
+    (cb, isVideo, isLogo) =>
     async ({
         action,
         data,
@@ -16,7 +16,7 @@ const uploadMedia =
         withCredentials,
     }) => {
         try {
-            const res = await utilsService.signUrl(isVideo);
+            const res = await utilsService.signUrl(isVideo, isLogo);
 
             axios
                 .put(res.data.signedRequest, file, {})
