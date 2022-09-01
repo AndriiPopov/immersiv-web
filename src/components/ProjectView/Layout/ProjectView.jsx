@@ -10,6 +10,7 @@ import { isMobile as isMobileAgent } from "react-device-detect";
 
 import { useWindowSize } from "@react-hook/window-size";
 import { Loading } from "components/ProjectView/Components/Loading/Loading";
+import ProjectA from "pages/ProjectA";
 const ProjectView = (props) => {
     const { project, constant } = props;
     const [width, height] = useWindowSize();
@@ -30,11 +31,25 @@ const ProjectView = (props) => {
                                 isMobile ? styles.flex1 : styles.viewInner
                             }
                         >
-                            <StreamViewWrapper
-                                setLoaded={setLoaded}
-                                setStatus={setStatus}
-                                project={project}
-                            />
+                            {project && project.isArcware ? (
+                                <ProjectA
+                                    project={project}
+                                    setLoaded={setLoaded}
+                                />
+                            ) : (
+                                <StreamViewWrapper
+                                    setLoaded={setLoaded}
+                                    setStatus={setStatus}
+                                    project={project}
+                                />
+                            )}
+                            {loaded && (
+                                <img
+                                    src="/images/logo-white.png"
+                                    alt="logo"
+                                    className={styles.mLogo}
+                                />
+                            )}
                             {!isMobile && (
                                 <>
                                     {loaded && (
@@ -120,7 +135,12 @@ const ProjectView = (props) => {
                     </div>
                 )}
             </div>
-            <Loading loaded={loaded} status={status} project={project} />
+            <Loading
+                loaded={loaded}
+                status={status}
+                project={project}
+                setLoaded={setLoaded}
+            />
         </>
     );
 };

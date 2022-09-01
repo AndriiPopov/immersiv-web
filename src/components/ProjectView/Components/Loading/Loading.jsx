@@ -9,6 +9,7 @@ const statusMessage = {
     queued: { text: "In queue", value: 40, from: 8 },
     requested: { text: "Model requested", value: 50, from: 40 },
     ready: { text: "Ready, 3D session launching", value: 100, from: 50 },
+    arcware: { text: "The project is loading", value: 100, from: 0 },
     serviced: { text: "Viewing model" },
     cancelled: { text: "Cancelled" },
     modelerror: { text: "An issue with the model has occurred" },
@@ -18,7 +19,7 @@ const statusMessage = {
 let interval = null;
 
 export const Loading = (props) => {
-    const { loaded, status, project } = props;
+    const { loaded, setLoaded, status, project } = props;
     const [message, setMessage] = useState(null);
     const [nextPercentage, setNextPercentage] = useState(0);
     const [percentage, setPercentage] = useState(0);
@@ -28,6 +29,10 @@ export const Loading = (props) => {
     }, [status?.status]);
 
     useEffect(() => {
+        if (project.isArcware) setMessage(statusMessage.arcware);
+    }, [project.isArcware]);
+
+    useEffect(() => {
         if (message?.text)
             setNextPercentage(
                 message.value ? Math.max(nextPercentage, message.value) : 0
@@ -35,12 +40,13 @@ export const Loading = (props) => {
     }, [message?.text]);
 
     useEffect(() => {
+        const speed = project.isArcware ? 100 : 870;
         if (nextPercentage) {
             setPercentage(message?.from || 0);
             if (interval) clearTimeout(interval);
             interval = setTimeout(
                 () => startPercentage(message?.from || 0, nextPercentage),
-                Math.random() * 870
+                Math.random() * speed
             );
         }
 
@@ -50,20 +56,17 @@ export const Loading = (props) => {
                 setPercentage(p + 1);
                 interval = setTimeout(
                     () => startPercentage(p + 1, nP),
-                    Math.random() * 870
+                    Math.random() * speed
                 );
             }
         };
     }, [nextPercentage]);
 
-    const [isVideoVisible, setIsVideoVisible] = useState(false);
-
-    // useEffect(() => {
-    //     setTimeout(
-    //         () => setIsVideoVisible(true),
-    //         project.projectDetailsDuraton * 1000 || 20000
-    //     );
-    // }, []);
+    useEffect(() => {
+        if (percentage === 100 && project.isArcware) {
+            setTimeout(() => setLoaded(true), 2000);
+        }
+    }, [percentage]);
 
     return loaded ? null : (
         <div
@@ -97,14 +100,10 @@ export const Loading = (props) => {
                     position: "absolute",
                 }}
             />
-            <img
-                src="/images/logo-white.png"
-                alt="logo"
-                className={styles.logo}
-            />
+
             <div className={styles.center}>
                 <div>
-                    {!isVideoVisible && project.projectDetailsOn && (
+                    {project.projectDetailsOn && (
                         <div
                             style={{
                                 display: "flex",
@@ -113,13 +112,20 @@ export const Loading = (props) => {
                             }}
                         >
                             <img
+                                src="/images/logo-white.png"
+                                alt="logo"
+                                className={styles.logo}
+                            />
+                            <img
                                 src={project.clientLogo}
                                 alt="logo"
                                 style={{
                                     maxHeight:
                                         project.clientLogoMaxHeight + "px",
                                     maxWidth: project.clientLogoMaxWidth + "px",
+                                    width: "100%",
                                     marginBottom: "36px",
+                                    marginTop: "36px",
                                 }}
                             />
                             {project.projectLogo ? (
@@ -131,6 +137,7 @@ export const Loading = (props) => {
                                             project.projectLogoMaxHeight + "px",
                                         maxWidth:
                                             project.projectLogoMaxWidth + "px",
+                                        width: "100%",
                                         marginBottom: "36px",
                                     }}
                                 />
@@ -139,14 +146,14 @@ export const Loading = (props) => {
                                     {project.projectName}
                                 </h6>
                             )}
-                            <p
+                            {/* <p
                                 style={{
                                     textAlign: "center",
                                     marginBottom: "36px",
                                 }}
                             >
                                 {project.description}
-                            </p>
+                            </p> */}
                         </div>
                     )}
 
@@ -159,7 +166,7 @@ export const Loading = (props) => {
                             playsInline
                         >
                             <source
-                                src="https://immersivmedia.s3.ap-southeast-2.amazonaws.com/website-media/navigation.mp4"
+                                src="https://immersivmedia.s3.ap-southeast-2.amazonaws.com/website-media/navigation-a.mp4"
                                 type="video/mp4"
                             />
                         </video>
@@ -182,7 +189,7 @@ export const Loading = (props) => {
                         "0%": "#108ee9",
                         "100%": "#87d068",
                     }}
-                    strokeWidth={30}
+                    strokeWidth={3}
                     showInfo={false}
                     format={
                         percentage !== 100
@@ -194,7 +201,6 @@ export const Loading = (props) => {
                               )
                             : undefined
                     }
-                    strokeWidth={3}
                 />
             )}
         </div>

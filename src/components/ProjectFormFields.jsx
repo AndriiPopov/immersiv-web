@@ -75,6 +75,7 @@ const ProjectFormFields = ({ setFieldsValue }) => {
             >
                 <Input placeholder="Name" />
             </Form.Item>
+
             <Form.Item
                 name="url"
                 label="Url"
@@ -90,28 +91,26 @@ const ProjectFormFields = ({ setFieldsValue }) => {
             </Form.Item>
 
             <Form.Item
-                name="projectId"
-                label="Project id"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please add project id!",
-                    },
-                ]}
+                label="Arcware project"
+                name="isArcware"
+                valuePropName="checked"
             >
+                <Checkbox />
+            </Form.Item>
+
+            <Form.Item name="arcwareAddress" label="Arcware address">
+                <Input placeholder="Arcware address" />
+            </Form.Item>
+
+            <Form.Item name="arcwarePackageId" label="Arcware project id">
+                <Input placeholder="Arcware project id" />
+            </Form.Item>
+
+            <Form.Item name="projectId" label="Project id" hidden>
                 <Input placeholder="Project id" />
             </Form.Item>
 
-            <Form.Item
-                name="modelId"
-                label="Model id"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please add model id!",
-                    },
-                ]}
-            >
+            <Form.Item name="modelId" label="Model id" hidden>
                 <Input placeholder="Model id" />
             </Form.Item>
 

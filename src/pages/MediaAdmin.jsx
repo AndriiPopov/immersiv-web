@@ -71,7 +71,7 @@ const MediaAdmin = (props) => {
                 ...values,
             });
         }
-    }, formRef.current.getFieldValue("type") === "video");
+    }, formRef?.current?.getFieldValue("type") === "video");
 
     return (
         <LayoutHOC>

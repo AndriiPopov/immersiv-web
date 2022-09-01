@@ -215,9 +215,9 @@ const ProjectDetails = (props) => {
                                             {projectName}
                                         </h6>
                                     )}
-                                    <p style={{ textAlign: "center" }}>
+                                    {/* <p style={{ textAlign: "center" }}>
                                         {description}
-                                    </p>
+                                    </p> */}
                                 </div>
                             </div>
                         </>

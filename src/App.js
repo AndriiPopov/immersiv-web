@@ -13,6 +13,7 @@ import PropertiesClient from "pages/PropertiesClient";
 import { lazy, Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ProjectA from "pages/ProjectA";
 
 const Home = lazy(() => import("pages/Home"));
 const Project = lazy(() => import("pages/Project"));
@@ -76,6 +77,7 @@ function App() {
                             path="/p/:id"
                             element={<Project />}
                         ></Route>
+                        <Route exact path="/pa" element={<ProjectA />}></Route>
                         <Route
                             exact
                             path="/p-admin/:id"
