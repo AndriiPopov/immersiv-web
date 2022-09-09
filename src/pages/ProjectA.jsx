@@ -3,6 +3,7 @@ import projectService from "services/project.service";
 import { useParams } from "react-router-dom";
 import constantService from "services/constant.service";
 import { WebRTCClient } from "@arcware/webrtc-plugin";
+import { Slider } from "antd";
 
 const descriptors = {
     color: {
@@ -27,18 +28,20 @@ const descriptors = {
 function AppUI(props) {
     const { emitUIInteraction } = props;
 
-    function colorChange(event) {
-        emitUIInteraction(descriptors.color[event?.target?.value]);
-    }
-
     return (
-        <div className="buttons-block">
-            <select onChange={colorChange}>
-                {Object.keys(descriptors.color).map((v) => (
-                    <option key={v}>{v}</option>
-                ))}
-            </select>
-        </div>
+        <Slider
+            style={{
+                position: "absolute",
+                marginLeft: "auto",
+                marginRight: "auto",
+                left: 0,
+                right: 0,
+                textAlign: "center",
+                zIndex: 1,
+            }}
+            defaultValue={30}
+            onChange={(value) => emitUIInteraction({ time: value })}
+        />
     );
 }
 
@@ -94,7 +97,7 @@ const ProjectA = (props) => {
 
     const videoInitialized = () => {
         if (webrtcClient) {
-            webrtcClient.emitUIInteraction(descriptors.color.black);
+            webrtcClient.emitUIInteraction({ time: 30 });
         }
     };
 
