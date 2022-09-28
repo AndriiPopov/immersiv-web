@@ -1,145 +1,105 @@
 import React, { useEffect, useRef, useState } from "react";
-import projectService from "services/project.service";
-import { useParams } from "react-router-dom";
-import constantService from "services/constant.service";
 import { WebRTCClient } from "@arcware/webrtc-plugin";
-import { Slider } from "antd";
+import { AppUI } from "components/ProjectView/Components/ProjectUI/AppUI";
 
 const descriptors = {
-    color: {
-        black: {
-            Change_Attribute_Event: true,
-            Attribute_Key: "Color",
-            Attribute_Value: "Black",
-        },
-        white: {
-            Change_Attribute_Event: true,
-            Attribute_Key: "Color",
-            Attribute_Value: "White",
-        },
-        yellow: {
-            Change_Attribute_Event: true,
-            Attribute_Key: "Color",
-            Attribute_Value: "Metro_Exodus",
-        },
+  color: {
+    black: {
+      Change_Attribute_Event: true,
+      Attribute_Key: "Color",
+      Attribute_Value: "Black",
     },
+    white: {
+      Change_Attribute_Event: true,
+      Attribute_Key: "Color",
+      Attribute_Value: "White",
+    },
+    yellow: {
+      Change_Attribute_Event: true,
+      Attribute_Key: "Color",
+      Attribute_Value: "Metro_Exodus",
+    },
+  },
 };
 
-function AppUI(props) {
-    const { emitUIInteraction } = props;
-
-    return (
-        <Slider
-            style={{
-                position: "absolute",
-                marginLeft: "auto",
-                marginRight: "auto",
-                left: 0,
-                right: 0,
-                textAlign: "center",
-                zIndex: 1,
-            }}
-            defaultValue={30}
-            onChange={(value) => emitUIInteraction({ time: value })}
-        />
-    );
-}
-
 function Responses(props) {
-    const { responses } = props;
+  const { responses } = props;
 
-    return (
-        <div className="responses-block">
-            <h4>Response log from UE app:</h4>
-            <div className="responses-list">
-                {responses.map((v) => (
-                    <p>{v}</p>
-                ))}
-            </div>
-        </div>
-    );
+  return (
+    <div className="responses-block">
+      <h4>Response log from UE app:</h4>
+      <div className="responses-list">
+        {responses.map((v) => (
+          <p>{v}</p>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 const ProjectA = (props) => {
-    const [projectData, setProjectData] = useState(null);
-    const [constant, setConstant] = useState({});
+  const { project, setVideoInitialized } = props;
 
-    const { featured } = props;
+  const sizeContainerRef = useRef(null);
+  const containerRef = useRef(null);
+  const videoRef = useRef(null);
+  const [webrtcClient, setWebrtcClient] = useState();
+  const [responses, setResponses] = useState([]);
+  const webrtcClientInit = useRef();
 
-    const { id } = useParams();
+  const responseCallback = (message) => {
+    setResponses([message, ...responses]);
+  };
 
-    useEffect(() => {
-        setProjectData(null);
-        if (featured)
-            projectService.getFeaturedProject().then((response) => {
-                setProjectData(response.data);
-            });
-        else
-            projectService.getProjectByUrl(id).then((response) => {
-                setProjectData(response.data);
-            });
+  const videoInitialized = () => {
+    if (webrtcClient) {
+      webrtcClient.emitUIInteraction({ time: 30 });
+    }
+    setVideoInitialized(true);
+  };
 
-        constantService.getConstant().then((response) => {
-            if (response.data) setConstant(response.data);
-        });
-    }, [id, featured]);
-
-    const sizeContainerRef = useRef(null);
-    const containerRef = useRef(null);
-    const videoRef = useRef(null);
-    const [webrtcClient, setWebrtcClient] = useState();
-    const [responses, setResponses] = useState([]);
-    let webrtcClientInit = false;
-
-    const responseCallback = (message) => {
-        setResponses([message, ...responses]);
+  useEffect(() => {
+    const args = {
+      address:
+        props.project.arcwareAddress ||
+        "wss://signalling-client.ragnarok.arcware.cloud/",
+      packageId:
+        props.project.arcwarePackageId ||
+        "ff41fd0c-cac9-4e4c-abe5-3ada402f57cc",
+      settings: {},
+      autoplay: { video: true, audio: true },
+      sizeContainer: sizeContainerRef.current,
+      container: containerRef.current,
+      videoRef: videoRef.current,
+      playOverlay: false,
+      loader: () => {},
+      applicationResponse: responseCallback,
+      videoInitializeCallback: videoInitialized,
     };
 
-    const videoInitialized = () => {
-        if (webrtcClient) {
-            webrtcClient.emitUIInteraction({ time: 30 });
-        }
-    };
+    // double load protection
+    if (!webrtcClientInit.current) {
+      webrtcClientInit.current = true;
+      setWebrtcClient(new WebRTCClient(args));
+    }
+  }, []);
 
-    useEffect(() => {
-        const args = {
-            address:
-                props.project.arcwareAddress ||
-                "wss://signalling-client.ragnarok.arcware.cloud/",
-            packageId:
-                props.project.arcwarePackageId ||
-                "ff41fd0c-cac9-4e4c-abe5-3ada402f57cc",
-            settings: {},
-            autoplay: { video: true, audio: true },
-            sizeContainer: sizeContainerRef.current,
-            container: containerRef.current,
-            videoRef: videoRef.current,
-            playOverlay: false,
-            loader: () => {},
-            applicationResponse: responseCallback,
-            videoInitializeCallback: videoInitialized,
-        };
-
-        // double load protection
-        if (!webrtcClientInit) {
-            webrtcClientInit = true;
-            setWebrtcClient(new WebRTCClient(args));
-        }
-    }, []);
-
-    return (
-        <>
-            <div ref={sizeContainerRef} style={{ flex: 1 }}>
-                <div ref={containerRef} style={{ zIndex: 1 }}>
-                    <video ref={videoRef} />
-                    {/* <Responses responses={responses} /> */}
-                </div>
-            </div>
-            {/* {webrtcClient != null && (
-                <AppUI emitUIInteraction={webrtcClient.emitUIInteraction} />
-            )} */}
-        </>
-    );
+  return (
+    <>
+      <div ref={sizeContainerRef} style={{ flex: 1 }}>
+        <div ref={containerRef} style={{ zIndex: 1 }}>
+          <video ref={videoRef} />
+          {/* <Responses responses={responses} /> */}
+        </div>
+      </div>
+      {webrtcClient != null && project?.newUI && (
+        <AppUI
+          emitUIInteraction={webrtcClient.emitUIInteraction}
+          project={project}
+        />
+      )}
+    </>
+  );
 };
 
 export default ProjectA;

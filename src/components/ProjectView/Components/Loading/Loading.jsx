@@ -19,7 +19,7 @@ const statusMessage = {
 let interval = null;
 
 export const Loading = (props) => {
-    const { loaded, setLoaded, status, project } = props;
+    const { loaded, setLoaded, status, project, videoInitialized } = props;
     const [message, setMessage] = useState(null);
     const [nextPercentage, setNextPercentage] = useState(0);
     const [percentage, setPercentage] = useState(0);
@@ -63,10 +63,10 @@ export const Loading = (props) => {
     }, [nextPercentage]);
 
     useEffect(() => {
-        if (percentage === 100 && project.isArcware) {
+        if (percentage === 100 && project.isArcware && videoInitialized) {
             setTimeout(() => setLoaded(true), 2000);
         }
-    }, [percentage]);
+    }, [percentage, videoInitialized]);
 
     return loaded ? null : (
         <div

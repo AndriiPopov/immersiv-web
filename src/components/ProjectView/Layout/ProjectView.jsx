@@ -17,6 +17,7 @@ const ProjectView = (props) => {
     // const isMobile = isMobileAgent || width < 1200 || height < 700;
     const isMobile = true;
     const [loaded, setLoaded] = useState(false);
+    const [videoInitialized, setVideoInitialized] = useState(false);
     const [status, setStatus] = useState(false);
 
     return (
@@ -35,6 +36,7 @@ const ProjectView = (props) => {
                                 <ProjectA
                                     project={project}
                                     setLoaded={setLoaded}
+                                    setVideoInitialized={setVideoInitialized}
                                 />
                             ) : (
                                 <StreamViewWrapper
@@ -140,6 +142,7 @@ const ProjectView = (props) => {
                 status={status}
                 project={project}
                 setLoaded={setLoaded}
+                videoInitialized={videoInitialized}
             />
         </>
     );
