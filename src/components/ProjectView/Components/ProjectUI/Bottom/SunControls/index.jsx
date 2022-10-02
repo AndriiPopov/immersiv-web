@@ -1,6 +1,7 @@
 import { Slider } from "antd";
 import React from "react";
 import styled from "styled-components";
+import { getTimeDescriptor } from "../../AppUI/descriptors";
 
 const Container = styled.div`
   top: 20px;
@@ -56,8 +57,8 @@ const TD2 = styled.td`
   text-align: left;
 `;
 
-const SunControls = (props) => {
-  const isVisible = props.activeUI?.includes("sun");
+const SunControls = ({ emitUIInteraction, activeUI }) => {
+  const isVisible = activeUI?.includes("sun");
   return (
     <Container open={isVisible}>
       <Inner>
@@ -65,7 +66,11 @@ const SunControls = (props) => {
           <TR>
             <TD0>12:00</TD0>
             <TD1>
-              <Slider />
+              <Slider
+                onChange={(value) =>
+                  emitUIInteraction(getTimeDescriptor(value))
+                }
+              />
             </TD1>
             <TD2>17:00</TD2>
           </TR>

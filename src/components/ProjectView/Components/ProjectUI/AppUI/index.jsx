@@ -1,10 +1,10 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { ApartmentControls } from "../Bottom/ApartmentContols";
 import { ButtonUI } from "../Bottom/ButtonUI";
 import { FilterControls } from "../Bottom/FilterControls";
 import Gallery from "../Bottom/Gallery";
-import { InfoButton } from "../Bottom/InfoButton";
 import { LocationControls } from "../Bottom/LocationControls";
 import { SunControls } from "../Bottom/SunControls";
 import { UIButtons } from "../Bottom/UIButtons";
@@ -38,29 +38,27 @@ const InfoContainer = styled.div`
 `;
 
 const AppUI = (props) => {
-  const [activeUI, setActiveUI] = useState([]);
+  const [activeUI, setActiveUI] = useState(["exterior"]);
+  const propsC = { ...props, activeUI, setActiveUI };
   return (
     <div style={{ zIndex: 1 }}>
       <Container>
         <ButtonsContainer>
-          <UIButtons {...props} setActiveUI={setActiveUI} activeUI={activeUI} />
+          <UIButtons {...propsC} />
         </ButtonsContainer>
         <InfoContainer>
-          <ButtonUI icon={<QuestionCircleOutlined />} />
+          <ButtonUI
+            icon={<QuestionCircleOutlined />}
+            visible={["exterior", "interior"]}
+            activeUI={activeUI}
+          />
         </InfoContainer>
       </Container>
-      <FilterControls
-        {...props}
-        setActiveUI={setActiveUI}
-        activeUI={activeUI}
-      />
-      <Gallery {...props} setActiveUI={setActiveUI} activeUI={activeUI} />
-      <SunControls {...props} setActiveUI={setActiveUI} activeUI={activeUI} />
-      <LocationControls
-        {...props}
-        setActiveUI={setActiveUI}
-        activeUI={activeUI}
-      />
+      <FilterControls {...propsC} />
+      <Gallery {...propsC} />
+      <SunControls {...propsC} />
+      <LocationControls {...propsC} />
+      <ApartmentControls {...propsC} />
     </div>
   );
 };

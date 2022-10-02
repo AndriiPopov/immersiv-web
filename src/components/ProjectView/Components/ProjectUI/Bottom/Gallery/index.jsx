@@ -48,7 +48,7 @@ const Gallery = ({ project, activeUI }) => {
 
   const images =
     media
-      .filter((i) => (tab ? tab === i.type : true))
+      ?.filter((i) => (tab ? tab === i.type : true))
       .map((i, index) => {
         if (i.type !== "video") {
           return {

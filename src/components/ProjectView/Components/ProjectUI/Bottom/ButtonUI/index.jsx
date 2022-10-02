@@ -17,17 +17,22 @@ export const Button = styled.div`
   }
 `;
 
-const ButtonUI = (props) => {
-  const isActive = props.activeUI?.includes(props.value || props.title);
-  return (
-    <Button
-      onClick={isActive ? props.onUnclick : props.onClick}
-      isActive={isActive}
-    >
-      {props.icon}
-      {props.title && <p>{props.title}</p>}
+const ButtonUI = ({
+  activeUI,
+  value,
+  title,
+  icon,
+  onUnclick,
+  onClick,
+  visible,
+}) => {
+  const isActive = activeUI?.includes(value || title);
+  return activeUI?.filter((v) => visible.includes(v)).length ? (
+    <Button onClick={isActive ? onUnclick : onClick} isActive={isActive}>
+      {icon}
+      {title && <p>{title}</p>}
     </Button>
-  );
+  ) : null;
 };
 
 export { ButtonUI };

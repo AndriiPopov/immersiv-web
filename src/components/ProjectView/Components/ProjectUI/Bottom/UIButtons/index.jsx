@@ -9,8 +9,6 @@ import {
   ShopOutlined,
 } from "@ant-design/icons";
 import styled from "styled-components";
-import { SunControls } from "../SunControls";
-import { FilterControls } from "../FilterControls";
 
 const Container = styled.div`
   display: flex;
@@ -25,6 +23,8 @@ const Container = styled.div`
 `;
 
 const UIButtons = (props) => {
+  const { activeUI, setActiveUI } = props;
+
   return (
     <>
       <Container>
@@ -32,42 +32,88 @@ const UIButtons = (props) => {
           {...props}
           title="home"
           icon={<HomeOutlined />}
-          onClick={() => props.setActiveUI(["home"])}
+          onClick={() => setActiveUI(["exterior"])}
+          visible={["exterior"]}
         />
         <ButtonUI
           {...props}
           title="gallery"
           icon={<PictureOutlined />}
-          onClick={() => props.setActiveUI(["gallery"])}
-          onUnclick={() => props.setActiveUI([])}
+          onClick={() => setActiveUI([activeUI[0], "gallery"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["exterior", "interior"]}
         />
         <ButtonUI
           {...props}
           title="nearby"
           icon={<PushpinOutlined />}
-          onClick={() => props.setActiveUI(["nearby"])}
-          onUnclick={() => props.setActiveUI([])}
+          onClick={() => setActiveUI([activeUI[0], "nearby"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["exterior"]}
         />
         <ButtonUI
           {...props}
           title="filter"
           icon={<SearchOutlined />}
-          onClick={() => props.setActiveUI(["filter"])}
-          onUnclick={() => props.setActiveUI([])}
+          onClick={() => setActiveUI([activeUI[0], "filter"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["exterior"]}
+        />
+        <ButtonUI
+          {...props}
+          title="materials"
+          icon={<SearchOutlined />}
+          onClick={() => setActiveUI([activeUI[0], "materials"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["interior"]}
+        />
+        <ButtonUI
+          {...props}
+          title="teleport"
+          icon={<SearchOutlined />}
+          onClick={() => setActiveUI([activeUI[0], "teleport"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["interior"]}
+        />
+        <ButtonUI
+          {...props}
+          title="info"
+          icon={<SearchOutlined />}
+          onClick={() => setActiveUI([activeUI[0], "info"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["interior"]}
         />
         <ButtonUI
           {...props}
           title="location"
           icon={<ShopOutlined />}
-          onClick={() => props.setActiveUI(["location"])}
-          onUnclick={() => props.setActiveUI([])}
+          onClick={() => setActiveUI([activeUI[0], "location"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["exterior", "interior"]}
         />
         <ButtonUI
           {...props}
           title="sun"
           icon={<ClockCircleOutlined />}
-          onClick={() => props.setActiveUI(["sun"])}
-          onUnclick={() => props.setActiveUI([])}
+          onClick={() => setActiveUI([activeUI[0], "sun"])}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["exterior", "interior"]}
+        />
+        <ButtonUI
+          {...props}
+          title="interior"
+          icon={<ClockCircleOutlined />}
+          onClick={() => setActiveUI(["interior"])}
+          onUnclick={() => setActiveUI(["exterior"])}
+          visible={["exterior", "interior"]}
+        />
+        <ButtonUI
+          {...props}
+          title="apartment"
+          icon={<ClockCircleOutlined />}
+          onClick={() => setActiveUI(["exterior", "apartment"])}
+          onUnclick={() => setActiveUI(["exterior"])}
+          visible={["exterior"]}
         />
       </Container>
     </>

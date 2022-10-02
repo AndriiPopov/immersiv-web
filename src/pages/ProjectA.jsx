@@ -2,41 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { WebRTCClient } from "@arcware/webrtc-plugin";
 import { AppUI } from "components/ProjectView/Components/ProjectUI/AppUI";
 
-const descriptors = {
-  color: {
-    black: {
-      Change_Attribute_Event: true,
-      Attribute_Key: "Color",
-      Attribute_Value: "Black",
-    },
-    white: {
-      Change_Attribute_Event: true,
-      Attribute_Key: "Color",
-      Attribute_Value: "White",
-    },
-    yellow: {
-      Change_Attribute_Event: true,
-      Attribute_Key: "Color",
-      Attribute_Value: "Metro_Exodus",
-    },
-  },
-};
-
-function Responses(props) {
-  const { responses } = props;
-
-  return (
-    <div className="responses-block">
-      <h4>Response log from UE app:</h4>
-      <div className="responses-list">
-        {responses.map((v) => (
-          <p>{v}</p>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 const ProjectA = (props) => {
   const { project, setVideoInitialized } = props;
 
@@ -44,11 +9,10 @@ const ProjectA = (props) => {
   const containerRef = useRef(null);
   const videoRef = useRef(null);
   const [webrtcClient, setWebrtcClient] = useState();
-  const [responses, setResponses] = useState([]);
   const webrtcClientInit = useRef();
 
   const responseCallback = (message) => {
-    setResponses([message, ...responses]);
+    console.log(message);
   };
 
   const videoInitialized = () => {
