@@ -1,10 +1,9 @@
 import { Slider } from "antd";
 import React from "react";
 import styled from "styled-components";
-import { getTimeDescriptor } from "../../AppUI/descriptors";
+import { AdminButton } from "../AdminButton";
 
 const Container = styled.div`
-  top: 20px;
   bottom: 60px;
   left: 0;
   right: 0;
@@ -24,9 +23,9 @@ const Inner = styled.table`
 `;
 
 const TR = styled.tr`
-  background-color: rgba(0, 0, 0, 0.8);
   margin: 5px 0;
   border-radius: 5px;
+  position: relative;
   td {
     padding: 5px;
   }
@@ -57,30 +56,76 @@ const TD2 = styled.td`
   text-align: left;
 `;
 
-const SunControls = ({ emitUIInteraction, activeUI }) => {
+const SunControls = ({
+  emitUIInteraction,
+  activeUI,
+  admin,
+  uiData,
+  setUiData,
+  hideHidden,
+  hideControls,
+}) => {
   const isVisible = activeUI?.includes("sun");
   return (
     <Container open={isVisible}>
       <Inner>
         <tbody>
-          <TR>
-            <TD0>12:00</TD0>
-            <TD1>
-              <Slider
-                onChange={(value) =>
-                  emitUIInteraction(getTimeDescriptor(value))
-                }
-              />
-            </TD1>
-            <TD2>17:00</TD2>
-          </TR>
-          <TR>
-            <TD0>S</TD0>
-            <TD1>
-              <Slider />
-            </TD1>
-            <TD2>N</TD2>
-          </TR>
+          {uiData?.time?.hide && (hideHidden || !admin) ? null : (
+            <TR
+              style={{
+                backgroundColor: (uiData?.background?.hex || "#000000") + "CC",
+              }}
+            >
+              <TD0>{`${uiData?.time?.min || 0}:00`}</TD0>
+              <TD1>
+                <Slider
+                  onChange={(v) => {
+                    emitUIInteraction?.({ Time: v });
+                  }}
+                  min={uiData?.time?.min || 0}
+                  max={uiData?.time?.max || 23}
+                  step={uiData?.time?.step || 1}
+                  tooltip={{ formatter: (v) => `${v}:00` }}
+                />
+              </TD1>
+              <TD2>{`${uiData?.time?.max || 23}:00`}</TD2>
+              {admin && (
+                <AdminButton
+                  uiData={uiData}
+                  setUiData={setUiData}
+                  name="time"
+                  hideControls={hideControls}
+                />
+              )}
+            </TR>
+          )}
+          {uiData?.position?.hide && (hideHidden || !admin) ? null : (
+            <TR
+              style={{
+                backgroundColor: (uiData?.background?.hex || "#000000") + "CC",
+              }}
+            >
+              <TD0>S</TD0>
+              <TD1>
+                <Slider
+                  tooltip={{ open: false }}
+                  onChange={(v) => {
+                    emitUIInteraction?.({ SunPosition: v });
+                  }}
+                />
+              </TD1>
+              <TD2>N</TD2>
+              {admin && (
+                <AdminButton
+                  uiData={uiData}
+                  setUiData={setUiData}
+                  name="position"
+                  button
+                  hideControls={hideControls}
+                />
+              )}
+            </TR>
+          )}
         </tbody>
       </Inner>
     </Container>

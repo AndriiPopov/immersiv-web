@@ -16,9 +16,6 @@ const ProjectA = (props) => {
   };
 
   const videoInitialized = () => {
-    if (webrtcClient) {
-      webrtcClient.emitUIInteraction({ time: 30 });
-    }
     setVideoInitialized(true);
   };
 
@@ -60,6 +57,7 @@ const ProjectA = (props) => {
         <AppUI
           emitUIInteraction={webrtcClient.emitUIInteraction}
           project={project}
+          uiData={project.uiData}
         />
       )}
     </>

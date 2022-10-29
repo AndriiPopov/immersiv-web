@@ -1,6 +1,7 @@
 import { EyeOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import React from "react";
 import styled from "styled-components";
+import { AdminButton } from "../AdminButton";
 
 const Container = styled.div`
   bottom: 60px;
@@ -35,9 +36,7 @@ const Inner2 = styled.div`
 `;
 
 const Top = styled.div`
-  background-color: black;
   border-radius: 5px;
-  color: white !important;
   padding: 15px 20px;
   display: flex;
   flex-direction: column;
@@ -98,7 +97,6 @@ const StatText = styled.div`
 `;
 
 const Bottom = styled.div`
-  background-color: black;
   border-radius: 5px;
   color: white;
   padding: 15px 20px;
@@ -126,20 +124,47 @@ const Stat = ({ icon, children }) => (
   </StatContainer>
 );
 
-const Button = ({ icon, children }) => (
-  <ButtonContainer>
-    <PlayCircleOutlined style={{ fontSize: "30px" }} />
-    <ButtonText>{children}</ButtonText>
-  </ButtonContainer>
-);
+const Button = ({
+  icon,
+  onClick,
+  admin,
+  uiData,
+  setUiData,
+  name,
+  label,
+  hideHidden,
+  hideControls,
+}) =>
+  uiData?.[name]?.hide && (hideHidden || !admin) ? null : (
+    <div style={{ position: "relative" }}>
+      <ButtonContainer onClick={onClick}>
+        <PlayCircleOutlined style={{ fontSize: "30px" }} />
+        <ButtonText>{uiData?.[name]?.label || label}</ButtonText>
+      </ButtonContainer>
+      {admin && (
+        <AdminButton
+          uiData={uiData}
+          setUiData={setUiData}
+          name={name}
+          button
+          hideControls={hideControls}
+        />
+      )}
+    </div>
+  );
 
 const ApartmentControls = (props) => {
   const isVisible = props.activeUI?.includes("apartment");
+  const { emitUIInteraction } = props;
   return (
     <Container open={isVisible}>
       <Inner>
         <Inner2>
-          <Top>
+          <Top
+            style={{
+              backgroundColor: props.uiData?.background?.hex || "black",
+            }}
+          >
             <Details>
               <NameContainer>
                 <Name>Name</Name>
@@ -157,10 +182,32 @@ const ApartmentControls = (props) => {
               <Stat icon={<EyeOutlined />}>180 m2</Stat>
             </Stats>
           </Top>
-          <Bottom>
-            <Button icon={<EyeOutlined />}>3D Tour</Button>
-            <Button icon={<EyeOutlined />}>Virtual tour</Button>
-            <Button icon={<EyeOutlined />}>Floor plan</Button>
+          <Bottom
+            style={{
+              backgroundColor: props.uiData?.background?.hex || "black",
+            }}
+          >
+            <Button
+              {...props}
+              icon={<EyeOutlined />}
+              onClick={() => emitUIInteraction?.({ TDTour: true })}
+              label="3D Tour"
+              name="TDTour"
+            ></Button>
+            <Button
+              {...props}
+              icon={<EyeOutlined />}
+              onClick={() => emitUIInteraction?.({ VTour: true })}
+              label="Virtual tour"
+              name="VTour"
+            ></Button>
+            <Button
+              {...props}
+              icon={<EyeOutlined />}
+              onClick={() => emitUIInteraction?.({ FloorPlan: true })}
+              label="Floor plan"
+              name="FloorPlan"
+            ></Button>
           </Bottom>
         </Inner2>
       </Inner>

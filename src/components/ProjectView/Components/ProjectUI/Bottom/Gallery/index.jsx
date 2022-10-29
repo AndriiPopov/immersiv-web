@@ -11,7 +11,7 @@ const Container = styled.div`
   right: 20px;
   padding: 10px;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
+
   visibility: ${({ open }) => (open ? "visible" : "hidden")};
 `;
 
@@ -21,7 +21,7 @@ const Inner = styled.div`
   overflow: hidden;
 `;
 
-const Gallery = ({ project, activeUI }) => {
+const Gallery = ({ project, activeUI, uiData }) => {
   const [tab, setTab] = useState("");
   const [slide, setSlide] = useState(0);
   const [dimensionsW, setDimensionsW] = useState({});
@@ -134,7 +134,13 @@ const Gallery = ({ project, activeUI }) => {
   };
 
   return (
-    <Container ref={ref} open={activeUI.includes("gallery")}>
+    <Container
+      ref={ref}
+      open={activeUI.includes("gallery")}
+      style={{
+        backgroundColor: (uiData?.background?.hex || "#000000") + "CC",
+      }}
+    >
       <Inner>
         <div className="buttons">
           <div

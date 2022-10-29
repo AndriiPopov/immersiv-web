@@ -1,6 +1,7 @@
-import { Button, ConfigProvider, Form, Slider, Tag } from "antd";
+import { Button, Form, Slider, Tag } from "antd";
 import React from "react";
 import styled from "styled-components";
+import { AdminButton } from "../AdminButton";
 
 const Container = styled.div`
   top: 20px;
@@ -15,7 +16,6 @@ const Container = styled.div`
 `;
 
 const Inner = styled.div`
-  background-color: rgba(0, 0, 0, 0.8);
   width: 100%;
   padding: 0px 30px 20px;
   max-height: 100%;
@@ -55,12 +55,21 @@ const SelectMulti = ({ options, value: propValue, onChange }) => {
   );
 };
 const FilterControls = (props) => {
-  const isVisible = props.activeUI?.includes("filter");
+  const {
+    activeUI,
+    emitUIInteraction,
+    admin,
+    uiData,
+    setUiData,
+    hideHidden,
+    hideControls,
+  } = props;
+  const isVisible = activeUI?.includes("filter");
   const [form] = Form.useForm();
 
   const items = [
     {
-      name: "budget",
+      name: "Budget",
       label: "Budget",
       type: "range",
       min: 0,
@@ -68,7 +77,7 @@ const FilterControls = (props) => {
       step: 1,
     },
     {
-      name: "size",
+      name: "Size",
       label: "Size",
       type: "range",
       min: 0,
@@ -76,7 +85,7 @@ const FilterControls = (props) => {
       step: 1,
     },
     {
-      name: "bedrooms",
+      name: "Bedrooms",
       label: "Bedrooms",
       type: "range",
       min: 0,
@@ -84,7 +93,7 @@ const FilterControls = (props) => {
       step: 0.5,
     },
     {
-      name: "bathrooms",
+      name: "Bathrooms",
       label: "Bathrooms",
       type: "range",
       min: 0,
@@ -92,7 +101,7 @@ const FilterControls = (props) => {
       step: 0.5,
     },
     {
-      name: "availability",
+      name: "Availability",
       label: "Availability",
       type: "selectMulti",
       options: [
@@ -102,7 +111,7 @@ const FilterControls = (props) => {
       ],
     },
     {
-      name: "orientation",
+      name: "Orientation",
       label: "Orientation",
       type: "selectMulti",
       options: [
@@ -117,7 +126,7 @@ const FilterControls = (props) => {
       ],
     },
     {
-      name: "depth",
+      name: "Depth",
       label: "Depth",
       type: "range",
       min: 0,
@@ -125,7 +134,7 @@ const FilterControls = (props) => {
       step: 0.5,
     },
     {
-      name: "frontage",
+      name: "Frontage",
       label: "Frontage",
       type: "range",
       min: 0,
@@ -136,65 +145,87 @@ const FilterControls = (props) => {
 
   return (
     <Container open={isVisible}>
-      <Inner>
-        <ConfigProvider
+      <Inner
+        style={{
+          backgroundColor: (props.uiData?.background?.hex || "#000000") + "CC",
+        }}
+      >
+        {/* <ConfigProvider
           getPopupContainer={(triggerNode) => triggerNode.parentNode}
-        >
-          <Form layout="vertical" form={form}>
-            {items.map(
-              ({
-                name,
-                label,
-                type,
-                defaultValue,
-                min,
-                max,
-                step,
-                options,
-              }) => {
-                return (
+        > */}
+        <Form layout="vertical" form={form}>
+          {items.map(
+            ({ name, label, type, defaultValue, min, max, step, options }) => {
+              const refinedTitle = uiData?.[name]?.label || label;
+
+              return uiData?.[name]?.hide && (hideHidden || !admin) ? null : (
+                <div style={{ position: "relative" }}>
                   <Form.Item
                     name={name}
-                    label={<label style={{ color: "white" }}>{label}</label>}
+                    label={
+                      <label style={{ color: "white" }}>{refinedTitle}</label>
+                    }
                     style={{ margin: "50px 0" }}
                   >
                     {!isVisible ? null : type === "range" ? (
                       <Slider
                         defaultValue={defaultValue || [min, max]}
-                        min={min}
-                        max={max}
-                        step={step}
+                        min={uiData?.[name]?.min || min}
+                        max={uiData?.[name]?.max || max}
+                        step={uiData?.[name]?.step || step}
                         range={{ draggableTrack: true }}
                         tooltipVisible={true}
                         tooltipPlacement="bottom"
+                        onChange={(v) => {
+                          emitUIInteraction?.({ [name]: v });
+                        }}
                       />
                     ) : (
                       <SelectMulti
                         options={options}
                         defaultValue={defaultValue}
+                        onChange={(v) => {
+                          emitUIInteraction?.({ [name]: v });
+                        }}
                       />
                     )}
                   </Form.Item>
-                );
-              }
-            )}
-            {isVisible && (
-              <Form.Item {...tailLayout}>
-                <Button
-                  htmlType="button"
-                  style={{ margin: "0 8px" }}
-                  type="link"
-                  onClick={() => form.resetFields()}
-                >
-                  Reset
-                </Button>
-                <Button type="primary" onClick={() => props.setActiveUI([])}>
-                  Apply
-                </Button>
-              </Form.Item>
-            )}
-          </Form>
-        </ConfigProvider>
+                  {admin && (
+                    <AdminButton
+                      uiData={uiData}
+                      setUiData={setUiData}
+                      name={name}
+                      button={type !== "range"}
+                      hideControls={hideControls}
+                    />
+                  )}
+                </div>
+              );
+            }
+          )}
+          {isVisible && (
+            <Form.Item {...tailLayout}>
+              <Button
+                htmlType="button"
+                style={{ margin: "0 8px" }}
+                type="link"
+                onClick={() => {
+                  form.resetFields();
+                  emitUIInteraction?.({ ResetFilters: true });
+                }}
+              >
+                Reset
+              </Button>
+              <Button
+                type="primary"
+                onClick={() => props.setActiveUI(["exterior"])}
+              >
+                Apply
+              </Button>
+            </Form.Item>
+          )}
+        </Form>
+        {/* </ConfigProvider> */}
       </Inner>
     </Container>
   );

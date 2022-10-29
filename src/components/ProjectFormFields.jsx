@@ -1,5 +1,14 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Image, Input, Switch, Upload } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Image,
+  Input,
+  InputNumber,
+  Switch,
+  Upload,
+} from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import uploadMedia from "helpers/uploadMedia";
 import React, { useEffect, useState } from "react";
@@ -116,6 +125,10 @@ const ProjectFormFields = ({ setFieldsValue }) => {
 
       <Form.Item name="modelId" label="Model id" hidden>
         <Input placeholder="Model id" />
+      </Form.Item>
+
+      <Form.Item name="levelsCount" label="Number of levels">
+        <InputNumber placeholder="Number of levels" />
       </Form.Item>
 
       <Form.Item

@@ -20,7 +20,6 @@ const Container = styled.div`
 `;
 
 const ButtonsContainer = styled.div`
-  background: black;
   flex: 1;
   display: flex;
   align-items: center;
@@ -41,12 +40,16 @@ const AppUI = (props) => {
   const [activeUI, setActiveUI] = useState(["exterior"]);
   const propsC = { ...props, activeUI, setActiveUI };
   return (
-    <div style={{ zIndex: 1 }}>
+    <div style={{ zIndex: 1, color: props.uiData?.textColor?.hex || "white" }}>
       <Container>
-        <ButtonsContainer>
+        <ButtonsContainer
+          style={{ backgroundColor: props.uiData?.background?.hex || "black" }}
+        >
           <UIButtons {...propsC} />
         </ButtonsContainer>
-        <InfoContainer>
+        <InfoContainer
+          style={{ backgroundColor: props.uiData?.background?.hex || "black" }}
+        >
           <ButtonUI
             icon={<QuestionCircleOutlined />}
             visible={["exterior", "interior"]}

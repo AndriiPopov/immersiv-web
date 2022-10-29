@@ -19,24 +19,32 @@ const Inner = styled.div`
 `;
 
 const Item = styled.div`
-  background-color: rgba(0, 0, 0, 0.8);
   border-radius: 5px;
   color: white;
   margin: 0 6px;
   padding: 5px 10px;
   white-space: nowrap;
+  cursor: pointer;
 `;
 
 const LocationControls = (props) => {
-  const isVisible = props.activeUI?.includes("location");
+  const { emitUIInteraction, activeUI, project } = props;
+  const isVisible = activeUI?.includes("location");
   return (
     <Container open={isVisible}>
       <Inner>
-        {["Level 1", "Level 2", "Level 3", "Level 4", "Level 5"].map(
-          (level) => (
-            <Item>{level}</Item>
-          )
-        )}
+        {[...Array(project?.levelsCount || 0)].map((_level, index) => (
+          <Item
+            onClick={() => {
+              emitUIInteraction?.({ Location: index });
+            }}
+            style={{
+              backgroundColor: props.uiData?.background?.hex || "#000000",
+            }}
+          >
+            {`Level ${index}`}
+          </Item>
+        ))}
       </Inner>
     </Container>
   );
