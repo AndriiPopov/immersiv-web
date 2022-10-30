@@ -8,6 +8,8 @@ import Gallery from "../Bottom/Gallery";
 import { LocationControls } from "../Bottom/LocationControls";
 import { SunControls } from "../Bottom/SunControls";
 import { UIButtons } from "../Bottom/UIButtons";
+import { QuestionOutlined } from "@ant-design/icons";
+import { BsQuestionLg } from "react-icons/bs";
 
 const Container = styled.div`
   position: fixed;
@@ -51,9 +53,11 @@ const AppUI = (props) => {
           style={{ backgroundColor: props.uiData?.background?.hex || "black" }}
         >
           <ButtonUI
-            icon={<QuestionCircleOutlined />}
+            icon={<BsQuestionLg />}
             visible={["exterior", "interior"]}
             activeUI={activeUI}
+            {...propsC}
+            adminSide="left"
           />
         </InfoContainer>
       </Container>
@@ -66,4 +70,18 @@ const AppUI = (props) => {
   );
 };
 
-export { AppUI };
+const getCustomColorsStyles = (props) => {
+  let color = props.uiData?.buttonColor?.hex || "white";
+  if (props.isActive)
+    color = props.uiData?.buttonHoverColor?.hex || "lightblue";
+
+  const hover =
+    props.uiData?.buttonHoverColor?.hex ||
+    props.uiData?.buttonColor?.hex ||
+    "lightblue";
+  return `color: ${color};
+  &:hover {
+    color: ${hover};
+  }`;
+};
+export { AppUI, getCustomColorsStyles };

@@ -9,7 +9,7 @@ const Container = styled.div`
   bottom: 60px;
   left: 20px;
   right: 20px;
-  padding: 10px;
+  padding: 30px 10px 10px;
   position: absolute;
 
   visibility: ${({ open }) => (open ? "visible" : "hidden")};

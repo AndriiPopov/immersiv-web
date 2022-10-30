@@ -2,6 +2,9 @@ import { EyeOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import React from "react";
 import styled from "styled-components";
 import { AdminButton } from "../AdminButton";
+import { FaBed, FaBath } from "react-icons/fa";
+import { IoResize } from "react-icons/io5";
+import { getCustomColorsStyles } from "../../AppUI";
 
 const Container = styled.div`
   bottom: 60px;
@@ -111,6 +114,7 @@ const ButtonContainer = styled.div`
   align-items: center;
   padding: 5px;
   margin: 0 10px;
+  ${(props) => getCustomColorsStyles?.(props)}
 `;
 
 const ButtonText = styled.div`
@@ -119,7 +123,7 @@ const ButtonText = styled.div`
 
 const Stat = ({ icon, children }) => (
   <StatContainer>
-    <PlayCircleOutlined style={{ fontSize: "30px" }} />
+    {icon}
     <StatText>{children}</StatText>
   </StatContainer>
 );
@@ -137,7 +141,7 @@ const Button = ({
 }) =>
   uiData?.[name]?.hide && (hideHidden || !admin) ? null : (
     <div style={{ position: "relative" }}>
-      <ButtonContainer onClick={onClick}>
+      <ButtonContainer onClick={onClick} uiData={uiData}>
         <PlayCircleOutlined style={{ fontSize: "30px" }} />
         <ButtonText>{uiData?.[name]?.label || label}</ButtonText>
       </ButtonContainer>
@@ -177,9 +181,9 @@ const ApartmentControls = (props) => {
               </InfoContainer>
             </Details>
             <Stats>
-              <Stat icon={<EyeOutlined />}>4 bed</Stat>
-              <Stat icon={<EyeOutlined />}>2 bath</Stat>
-              <Stat icon={<EyeOutlined />}>180 m2</Stat>
+              <Stat icon={<FaBed size={30} />}>4 bed</Stat>
+              <Stat icon={<FaBath size={30} />}>2 bath</Stat>
+              <Stat icon={<IoResize size={30} />}>180 m2</Stat>
             </Stats>
           </Top>
           <Bottom

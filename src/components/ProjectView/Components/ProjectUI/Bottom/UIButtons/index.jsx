@@ -4,10 +4,21 @@ import {
   ClockCircleOutlined,
   HomeOutlined,
   PictureOutlined,
-  PushpinOutlined,
   SearchOutlined,
-  ShopOutlined,
 } from "@ant-design/icons";
+
+import {
+  BsChevronExpand,
+  BsFillSunFill,
+  BsPinMap,
+  BsArrowLeftRight,
+  BsEye,
+  BsInfoCircle,
+  BsLayoutWtf,
+} from "react-icons/bs";
+
+import { FaLevelUpAlt } from "react-icons/fa";
+
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -51,7 +62,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="nearby"
-          icon={<PushpinOutlined />}
+          icon={<BsPinMap />}
           onClick={() => {
             setActiveUI([activeUI[0], "nearby"]);
             emitUIInteraction?.({ Nearby: true });
@@ -72,7 +83,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="materials"
-          icon={<SearchOutlined />}
+          icon={<BsArrowLeftRight />}
           onClick={() => {
             setActiveUI([activeUI[0], "materials"]);
             emitUIInteraction?.({ Materials: true });
@@ -84,7 +95,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="teleport"
-          icon={<SearchOutlined />}
+          icon={<BsEye />}
           onClick={() => {
             setActiveUI([activeUI[0], "teleport"]);
             emitUIInteraction?.({ Teleport: true });
@@ -96,7 +107,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="info"
-          icon={<SearchOutlined />}
+          icon={<BsInfoCircle />}
           onClick={() => setActiveUI([activeUI[0], "info"])}
           onUnclick={() => setActiveUI([activeUI[0]])}
           visible={["interior"]}
@@ -105,7 +116,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="location"
-          icon={<ShopOutlined />}
+          icon={<BsChevronExpand />}
           onClick={() => {
             setActiveUI([activeUI[0], "location"]);
           }}
@@ -116,7 +127,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="sun"
-          icon={<ClockCircleOutlined />}
+          icon={<BsFillSunFill />}
           onClick={() => setActiveUI([activeUI[0], "sun"])}
           onUnclick={() => setActiveUI([activeUI[0]])}
           visible={["exterior", "interior"]}
@@ -125,7 +136,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="Floor plan"
-          icon={<SearchOutlined />}
+          icon={<BsLayoutWtf />}
           onClick={() => {
             setActiveUI([activeUI[0], "floorPlan"]);
             emitUIInteraction?.({ FloorPlan: true });
@@ -137,7 +148,7 @@ const UIButtons = (props) => {
         <ButtonUI
           {...props}
           title="Level view"
-          icon={<SearchOutlined />}
+          icon={<FaLevelUpAlt />}
           onClick={() => {
             setActiveUI([activeUI[0], "levelView"]);
             emitUIInteraction?.({ LevelView: true });

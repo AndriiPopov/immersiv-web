@@ -6,7 +6,7 @@ import styled from "styled-components";
 const MoreButton = styled(Button)`
   position: absolute;
   top: 0px;
-  right: -25px;
+  ${(props) => (props.adminSide === "left" ? "left: -25px;" : "right: -25px;")}
 `;
 
 const Overlay = styled.div`
@@ -15,7 +15,14 @@ const Overlay = styled.div`
   background-color: rgba(83, 72, 4, 0.6);
 `;
 
-const AdminButton = ({ uiData, setUiData, name, button, hideControls }) => {
+const AdminButton = ({
+  uiData,
+  setUiData,
+  name,
+  button,
+  hideControls,
+  adminSide,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -40,6 +47,7 @@ const AdminButton = ({ uiData, setUiData, name, button, hideControls }) => {
           shape="circle"
           icon={<MoreOutlined />}
           onClick={showModal}
+          adminSide={adminSide}
         />
       )}
 

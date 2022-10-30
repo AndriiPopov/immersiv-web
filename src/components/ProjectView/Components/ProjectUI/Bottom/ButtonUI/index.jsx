@@ -1,21 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import { getCustomColorsStyles } from "../../AppUI";
 import { AdminButton } from "../AdminButton";
 
 export const Button = styled.div`
-  color: ${(props) => (props.isActive ? "lightblue" : "white")};
   cursor: pointer;
-  padding: 0px 5px;
+  padding: 5px 5px 0px;
   font-size: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   user-select: none;
+  ${(props) => getCustomColorsStyles?.(props)}
   > p {
     font-size: 11px;
     margin: 0;
     margin-top: 5px;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 `;
 
@@ -33,6 +35,7 @@ const ButtonUI = ({
   name,
   hideControls,
   hideHidden,
+  adminSide,
 }) => {
   const isActive = activeUI?.includes(value || title);
   let isVisible = activeUI?.filter((v) => visible.includes(v)).length || admin;
@@ -42,7 +45,11 @@ const ButtonUI = ({
   const refinedTitle = uiData?.[name]?.label || title;
   return isVisible ? (
     <div style={{ position: "relative" }}>
-      <Button onClick={isActive ? onUnclick : onClick} isActive={isActive}>
+      <Button
+        onClick={isActive ? onUnclick : onClick}
+        isActive={isActive}
+        uiData={uiData}
+      >
         {icon}
         {refinedTitle && <p>{refinedTitle}</p>}
       </Button>
@@ -53,6 +60,7 @@ const ButtonUI = ({
           name={name}
           button
           hideControls={hideControls}
+          adminSide={adminSide}
         />
       )}
     </div>
