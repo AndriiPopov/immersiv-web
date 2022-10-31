@@ -5,11 +5,11 @@ import ImageGallery from "react-image-gallery";
 import styled from "styled-components";
 
 const Container = styled.div`
-  top: 20px;
-  bottom: 60px;
-  left: 20px;
-  right: 20px;
-  padding: 30px 10px 10px;
+  top: 00px;
+  bottom: 50px;
+  left: 0px;
+  right: 0px;
+  padding: 50px 10px 10px;
   position: absolute;
 
   visibility: ${({ open }) => (open ? "visible" : "hidden")};

@@ -55,7 +55,10 @@ const ProjectA = (props) => {
       </div>
       {webrtcClient != null && project?.newUI && (
         <AppUI
-          emitUIInteraction={webrtcClient.emitUIInteraction}
+          emitUIInteraction={(v) => {
+            webrtcClient.emitUIInteraction(v);
+            console.log("emitUIInteraction() with: ", v);
+          }}
           project={project}
           uiData={project.uiData}
         />

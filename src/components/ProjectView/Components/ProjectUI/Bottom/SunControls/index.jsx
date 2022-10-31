@@ -112,6 +112,9 @@ const SunControls = ({
                   onChange={(v) => {
                     emitUIInteraction?.({ SunPosition: v });
                   }}
+                  min={uiData?.position?.min || 0}
+                  max={uiData?.position?.max || 360}
+                  step={uiData?.position?.step || 1}
                 />
               </TD1>
               <TD2>N</TD2>
@@ -120,7 +123,6 @@ const SunControls = ({
                   uiData={uiData}
                   setUiData={setUiData}
                   name="position"
-                  button
                   hideControls={hideControls}
                 />
               )}

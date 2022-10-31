@@ -16,6 +16,7 @@ const Inner = styled.div`
   display: flex;
   flex: 1;
   overflow-x: auto;
+  justify-content: center;
 `;
 
 const Item = styled.div`

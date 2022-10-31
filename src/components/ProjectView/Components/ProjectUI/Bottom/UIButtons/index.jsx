@@ -17,6 +17,8 @@ import {
   BsLayoutWtf,
 } from "react-icons/bs";
 
+import { BiCompass } from "react-icons/bi";
+
 import { FaLevelUpAlt } from "react-icons/fa";
 
 import styled from "styled-components";
@@ -67,7 +69,10 @@ const UIButtons = (props) => {
             setActiveUI([activeUI[0], "nearby"]);
             emitUIInteraction?.({ Nearby: true });
           }}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ Nearby: true });
+          }}
           visible={["exterior"]}
           name="nearby"
         />
@@ -75,8 +80,14 @@ const UIButtons = (props) => {
           {...props}
           title="filter"
           icon={<SearchOutlined />}
-          onClick={() => setActiveUI([activeUI[0], "filter"])}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onClick={() => {
+            setActiveUI([activeUI[0], "filter"]);
+            emitUIInteraction?.({ Filter: true });
+          }}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ Filter: true });
+          }}
           visible={["exterior"]}
           name="filter"
         />
@@ -88,7 +99,10 @@ const UIButtons = (props) => {
             setActiveUI([activeUI[0], "materials"]);
             emitUIInteraction?.({ Materials: true });
           }}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ Materials: true });
+          }}
           visible={["interior"]}
           name="materials"
         />
@@ -100,7 +114,10 @@ const UIButtons = (props) => {
             setActiveUI([activeUI[0], "teleport"]);
             emitUIInteraction?.({ Teleport: true });
           }}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ Teleport: true });
+          }}
           visible={["interior"]}
           name="teleport"
         />
@@ -108,14 +125,35 @@ const UIButtons = (props) => {
           {...props}
           title="info"
           icon={<BsInfoCircle />}
-          onClick={() => setActiveUI([activeUI[0], "info"])}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onClick={() => {
+            setActiveUI([activeUI[0], "info"]);
+            emitUIInteraction?.({ InteriorInfo: true });
+          }}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ InteriorInfo: true });
+          }}
           visible={["interior"]}
           name="info"
         />
         <ButtonUI
           {...props}
-          title="location"
+          title="discover"
+          icon={<BiCompass />}
+          onClick={() => {
+            setActiveUI([activeUI[0], "discover"]);
+            emitUIInteraction?.({ Discover: true });
+          }}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ Discover: true });
+          }}
+          visible={["exterior"]}
+          name="info"
+        />
+        <ButtonUI
+          {...props}
+          title="level"
           icon={<BsChevronExpand />}
           onClick={() => {
             setActiveUI([activeUI[0], "location"]);
@@ -124,6 +162,7 @@ const UIButtons = (props) => {
           visible={["exterior", "interior"]}
           name="location"
         />
+
         <ButtonUI
           {...props}
           title="sun"
@@ -141,7 +180,10 @@ const UIButtons = (props) => {
             setActiveUI([activeUI[0], "floorPlan"]);
             emitUIInteraction?.({ FloorPlan: true });
           }}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ FloorPlan: true });
+          }}
           visible={["interior"]}
           name="floorPlan"
         />
@@ -153,7 +195,10 @@ const UIButtons = (props) => {
             setActiveUI([activeUI[0], "levelView"]);
             emitUIInteraction?.({ LevelView: true });
           }}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ LevelView: true });
+          }}
           visible={["interior"]}
           name="levelView"
         />
