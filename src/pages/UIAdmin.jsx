@@ -83,8 +83,18 @@ const UIAdmin = (props) => {
               onValuesChange={(values) => {
                 setUiData((prevState) => ({ ...prevState, ...values }));
               }}
-              initialValues={{ background: uiData?.background?.hex }}
+              initialValues={{
+                background: uiData?.background?.hex,
+                onlyInterior: uiData?.onlyInterior,
+              }}
             >
+              <Form.Item
+                label="Only interior"
+                name="onlyInterior"
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
               <Form.Item label="Hide hidden elements">
                 <Checkbox onChange={(e) => setHideHidden(e.target.checked)} />
               </Form.Item>

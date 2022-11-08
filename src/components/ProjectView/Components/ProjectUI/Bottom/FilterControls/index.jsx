@@ -1,5 +1,7 @@
 import { Button, ConfigProvider, Form, Slider, Tag } from "antd";
 import React, { useState } from "react";
+import { BiCloset, BiReset } from "react-icons/bi";
+import { IoClose } from "react-icons/io5";
 import styled from "styled-components";
 import { AdminButton } from "../AdminButton";
 
@@ -13,20 +15,25 @@ const Container = styled.div`
   align-items: flex-end;
   justify-content: center;
   visibility: ${({ open }) => (open ? "visible" : "hidden")};
+  pointer-events: none;
 `;
 
 const Inner = styled.div`
   width: 100%;
-  padding: 40px 30px 20px;
+  padding: 70px 30px 20px;
   max-height: 100%;
   max-width: 600px;
   overflow: auto;
   overflow-x: hidden;
+  pointer-events: all;
+  position: relative;
 `;
 
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
+const ButtonsContainer = styled.div`
+  position: absolute;
+  right: 0px;
+  top: 20px;
+`;
 
 const SelectMulti = ({
   options,
@@ -138,98 +145,86 @@ const FilterControls = (props) => {
           backgroundColor: (props.uiData?.background?.hex || "#000000") + "CC",
         }}
       >
-        <ConfigProvider
+        {/* <ConfigProvider
           getPopupContainer={(triggerNode) => triggerNode.parentNode}
+        > */}
+        {isVisible && (
+          <ButtonsContainer>
+            <Button
+              htmlType="button"
+              style={{ margin: "0 8px" }}
+              type="link"
+              onClick={() => {
+                form.resetFields();
+                emitUIInteraction?.({ ResetFilters: true });
+              }}
+            >
+              <BiReset size={30} color="white" />
+            </Button>
+            <Button onClick={() => props.setActiveUI(["exterior"])} type="link">
+              <IoClose size={30} color="white" />
+            </Button>
+          </ButtonsContainer>
+        )}
+        <Form
+          layout="vertical"
+          form={form}
+          initialValues={{
+            Orientation: ["N", "E", "S", "W"],
+            Availability: ["Available", "Reserved", "Sold"],
+          }}
+          onValuesChange={setValuesState}
         >
-          <Form
-            layout="vertical"
-            form={form}
-            initialValues={{
-              Orientation: ["N", "E", "S", "W"],
-              Availability: ["Available", "Reserved", "Sold"],
-            }}
-            onValuesChange={setValuesState}
-          >
-            {items.map(
-              ({
-                name,
-                label,
-                type,
-                defaultValue,
-                min,
-                max,
-                step,
-                options,
-              }) => {
-                let refinedTitle = uiData?.[name]?.label || label;
-                if (type === "range")
-                  refinedTitle = `${refinedTitle}: more than ${
-                    valuesState[name] || 0
-                  }`;
-                return uiData?.[name]?.hide && (hideHidden || !admin) ? null : (
-                  <div style={{ position: "relative" }}>
-                    <Form.Item
-                      name={name}
-                      label={
-                        <label style={{ color: "white" }}>{refinedTitle}</label>
-                      }
-                    >
-                      {!isVisible ? null : type === "range" ? (
-                        <Slider
-                          defaultValue={defaultValue || [min, max]}
-                          min={uiData?.[name]?.min || min}
-                          max={uiData?.[name]?.max || max}
-                          step={uiData?.[name]?.step || step}
-                          onChange={(v) => {
-                            emitUIInteraction?.({ [name]: v });
-                          }}
-                        />
-                      ) : (
-                        <SelectMulti
-                          options={options}
-                          defaultValue={defaultValue}
-                          emitUIInteraction={(v) =>
-                            emitUIInteraction?.({ [name]: v })
-                          }
-                        />
-                      )}
-                    </Form.Item>
-                    {admin && (
-                      <AdminButton
-                        uiData={uiData}
-                        setUiData={setUiData}
-                        name={name}
-                        button={type !== "range"}
-                        hideControls={hideControls}
+          {items.map(
+            ({ name, label, type, defaultValue, min, max, step, options }) => {
+              let refinedTitle = uiData?.[name]?.label || label;
+              if (type === "range")
+                refinedTitle = `${refinedTitle}: more than ${
+                  valuesState[name] || 0
+                }`;
+              return uiData?.[name]?.hide && (hideHidden || !admin) ? null : (
+                <div style={{ position: "relative" }}>
+                  <Form.Item
+                    name={name}
+                    label={
+                      <label style={{ color: "white" }}>{refinedTitle}</label>
+                    }
+                  >
+                    {!isVisible ? null : type === "range" ? (
+                      <Slider
+                        defaultValue={defaultValue || [min, max]}
+                        min={uiData?.[name]?.min || min}
+                        max={uiData?.[name]?.max || max}
+                        step={uiData?.[name]?.step || step}
+                        onChange={(v) => {
+                          emitUIInteraction?.({ [name]: v });
+                        }}
+                      />
+                    ) : (
+                      <SelectMulti
+                        options={options}
+                        defaultValue={defaultValue}
+                        emitUIInteraction={(v) =>
+                          emitUIInteraction?.({ [v]: true })
+                        }
                       />
                     )}
-                  </div>
-                );
-              }
-            )}
-            {isVisible && (
-              <Form.Item {...tailLayout}>
-                <Button
-                  htmlType="button"
-                  style={{ margin: "0 8px" }}
-                  type="link"
-                  onClick={() => {
-                    form.resetFields();
-                    emitUIInteraction?.({ ResetFilters: true });
-                  }}
-                >
-                  Reset
-                </Button>
-                <Button
-                  type="primary"
-                  onClick={() => props.setActiveUI(["exterior"])}
-                >
-                  Apply
-                </Button>
-              </Form.Item>
-            )}
-          </Form>
-        </ConfigProvider>
+                  </Form.Item>
+                  {admin && (
+                    <AdminButton
+                      uiData={uiData}
+                      setUiData={setUiData}
+                      name={name}
+                      button={type !== "range"}
+                      hideControls={hideControls}
+                    />
+                  )}
+                </div>
+              );
+            }
+          )}
+        </Form>
+        {/* </ConfigProvider> */}
       </Inner>
     </Container>
   );

@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ApartmentControls } from "../Bottom/ApartmentContols";
 import { ButtonUI } from "../Bottom/ButtonUI";
@@ -10,6 +10,7 @@ import { SunControls } from "../Bottom/SunControls";
 import { UIButtons } from "../Bottom/UIButtons";
 import { QuestionOutlined } from "@ant-design/icons";
 import { BsQuestionLg } from "react-icons/bs";
+import { InfoButton } from "../Bottom/InfoButton";
 
 const Container = styled.div`
   position: fixed;
@@ -40,7 +41,18 @@ const InfoContainer = styled.div`
 
 const AppUI = (props) => {
   const [activeUI, setActiveUI] = useState(["exterior"]);
-  const propsC = { ...props, activeUI, setActiveUI };
+  const propsC = {
+    ...props,
+    activeUI,
+    setActiveUI: (v) => {
+      if (props.uiData?.onlyInterior && v.includes("exterior"))
+        setActiveUI(["interior"]);
+      else setActiveUI(v);
+    },
+  };
+  useEffect(() => {
+    if (props.uiData?.onlyInterior) setActiveUI(["interior"]);
+  }, [props.uiData?.onlyInterior]);
   return (
     <div style={{ zIndex: 1, color: props.uiData?.textColor?.hex || "white" }}>
       <Container>
@@ -52,13 +64,7 @@ const AppUI = (props) => {
         <InfoContainer
           style={{ backgroundColor: props.uiData?.background?.hex || "black" }}
         >
-          <ButtonUI
-            icon={<BsQuestionLg />}
-            visible={["exterior", "interior"]}
-            activeUI={activeUI}
-            {...propsC}
-            adminSide="left"
-          />
+          <InfoButton {...propsC} />
         </InfoContainer>
       </Container>
       <FilterControls {...propsC} />

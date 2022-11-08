@@ -202,15 +202,17 @@ const UIButtons = (props) => {
           visible={["interior"]}
           name="levelView"
         />
-        <ButtonUI
-          {...props}
-          title="interior"
-          icon={<ClockCircleOutlined />}
-          onClick={() => setActiveUI(["interior"])}
-          onUnclick={() => setActiveUI(["exterior"])}
-          visible={["exterior", "interior"]}
-          admin={false}
-        />
+        {!props.uiData.onlyInterior && (
+          <ButtonUI
+            {...props}
+            title="interior"
+            icon={<ClockCircleOutlined />}
+            onClick={() => setActiveUI(["interior"])}
+            onUnclick={() => setActiveUI(["exterior"])}
+            visible={["exterior", "interior"]}
+            admin={false}
+          />
+        )}
         <ButtonUI
           {...props}
           title="apartment"
