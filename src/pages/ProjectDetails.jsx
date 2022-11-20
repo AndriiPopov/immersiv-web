@@ -52,7 +52,6 @@ const ProjectDetails = (props) => {
     }
   };
 
-  const description = Form.useWatch("description", form);
   const projectName = Form.useWatch("projectName", form);
   const clientLogo = Form.useWatch("clientLogo", form);
   const clientLogoMaxWidth = Form.useWatch("clientLogoMaxWidth", form);

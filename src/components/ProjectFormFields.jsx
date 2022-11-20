@@ -111,6 +111,26 @@ const ProjectFormFields = ({ setFieldsValue }) => {
         <Checkbox />
       </Form.Item>
 
+      <Form.Item
+        label="Monkeyway project"
+        name="isMonkeyway"
+        valuePropName="checked"
+      >
+        <Checkbox />
+      </Form.Item>
+
+      <Form.Item name="monkeywayBaseUrl" label="Monkeyway base url">
+        <Input placeholder="Leave empty for default." />
+      </Form.Item>
+
+      <Form.Item name="monkeywayAppEnvId" label="Monkeyway app env id">
+        <Input placeholder="Monkeyway app env id" />
+      </Form.Item>
+
+      <Form.Item name="monkeywayApiKey" label="Monkeyway api key">
+        <Input placeholder="Monkeyway api key" />
+      </Form.Item>
+
       <Form.Item name="arcwareAddress" label="Arcware address">
         <Input placeholder="Arcware address" />
       </Form.Item>

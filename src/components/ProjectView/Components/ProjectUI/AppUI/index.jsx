@@ -11,6 +11,7 @@ import { UIButtons } from "../Bottom/UIButtons";
 import { QuestionOutlined } from "@ant-design/icons";
 import { BsQuestionLg } from "react-icons/bs";
 import { InfoButton } from "../Bottom/InfoButton";
+import { RoomsControls } from "../Bottom/RoomsControls";
 
 const Container = styled.div`
   position: fixed;
@@ -71,6 +72,7 @@ const AppUI = (props) => {
       <Gallery {...propsC} />
       <SunControls {...propsC} />
       <LocationControls {...propsC} />
+      <RoomsControls {...propsC} />
       <ApartmentControls {...propsC} />
     </div>
   );

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import "video.js/dist/video-js.css";
 import { AppUI } from "components/ProjectView/Components/ProjectUI/AppUI";
 import { ChromePicker } from "react-color";
+import CodeMirror from "@uiw/react-codemirror";
 
 const UIAdmin = (props) => {
   const { id } = useParams();
@@ -86,6 +87,7 @@ const UIAdmin = (props) => {
               initialValues={{
                 background: uiData?.background?.hex,
                 onlyInterior: uiData?.onlyInterior,
+                rooms: uiData?.rooms || "",
               }}
             >
               <Form.Item
@@ -124,6 +126,10 @@ const UIAdmin = (props) => {
                 valuePropName="color"
               >
                 <ChromePicker disableAlpha />
+              </Form.Item>
+
+              <Form.Item label="Rooms" name="rooms">
+                <CodeMirror height="200px" />
               </Form.Item>
               <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type="primary" htmlType="submit">

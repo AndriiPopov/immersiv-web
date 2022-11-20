@@ -17,6 +17,8 @@ import {
   BsLayoutWtf,
 } from "react-icons/bs";
 
+import { MdOutlineMeetingRoom } from "react-icons/md";
+
 import { BiCompass } from "react-icons/bi";
 
 import { FaLevelUpAlt } from "react-icons/fa";
@@ -157,6 +159,18 @@ const UIButtons = (props) => {
           icon={<BsChevronExpand />}
           onClick={() => {
             setActiveUI([activeUI[0], "location"]);
+          }}
+          onUnclick={() => setActiveUI([activeUI[0]])}
+          visible={["exterior", "interior"]}
+          name="location"
+        />
+
+        <ButtonUI
+          {...props}
+          title="rooms"
+          icon={<MdOutlineMeetingRoom />}
+          onClick={() => {
+            setActiveUI([activeUI[0], "rooms"]);
           }}
           onUnclick={() => setActiveUI([activeUI[0]])}
           visible={["exterior", "interior"]}
