@@ -23,7 +23,6 @@ export const Button = styled.div`
 
 const ButtonUI = ({
   activeUI,
-  value,
   title,
   icon,
   onUnclick,
@@ -37,7 +36,7 @@ const ButtonUI = ({
   hideHidden,
   adminSide,
 }) => {
-  const isActive = activeUI?.includes(value || title);
+  const isActive = activeUI?.includes(name || title);
   let isVisible = activeUI?.filter((v) => visible.includes(v)).length || admin;
 
   if (uiData?.[name]?.hide && (hideHidden || !admin)) isVisible = false;

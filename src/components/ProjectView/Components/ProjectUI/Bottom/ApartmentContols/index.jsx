@@ -2,9 +2,11 @@ import { EyeOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import React from "react";
 import styled from "styled-components";
 import { AdminButton } from "../AdminButton";
-import { FaBed, FaBath } from "react-icons/fa";
+import { FaBed, FaBath, FaHouseUser } from "react-icons/fa";
 import { IoResize } from "react-icons/io5";
+import { TbViewportWide } from "react-icons/tb";
 import { getCustomColorsStyles } from "../../AppUI";
+import { MdOtherHouses } from "react-icons/md";
 
 const Container = styled.div`
   bottom: 60px;
@@ -70,16 +72,21 @@ const Availability = styled.div`
   font-size: 16px;
 `;
 
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const FacadeName = styled.div`
+  margin-top: 20px;
+  font-size: 16px;
 `;
 
-const Frontage = styled.div`
-  line-height: 40px;
-`;
+// const InfoContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+// `;
 
-const Depth = styled.div``;
+// const Frontage = styled.div`
+//   line-height: 40px;
+// `;
+
+// const Depth = styled.div``;
 
 const Stats = styled.div`
   display: flex;
@@ -114,22 +121,43 @@ const ButtonContainer = styled.div`
   align-items: center;
   padding: 5px;
   margin: 0 10px;
-  ${(props) => getCustomColorsStyles?.(props)}
+  cursor: pointer;
+  ${(props) => getCustomColorsStyles?.(props)};
 `;
 
 const ButtonText = styled.div`
   margin-top: 5px;
 `;
 
-const Stat = ({ icon, children }) => (
-  <StatContainer>
-    {icon}
-    <StatText>{children}</StatText>
-  </StatContainer>
-);
+const Stat = ({
+  icon,
+  admin,
+  uiData,
+  setUiData,
+  name,
+  hideHidden,
+  hideControls,
+  children,
+}) =>
+  uiData?.[name]?.hide && (hideHidden || !admin) ? null : (
+    <div style={{ position: "relative" }}>
+      <StatContainer>
+        {icon}
+        <StatText>{children}</StatText>
+      </StatContainer>
+      {admin && (
+        <AdminButton
+          uiData={uiData}
+          setUiData={setUiData}
+          name={name}
+          button
+          hideControls={hideControls}
+        />
+      )}
+    </div>
+  );
 
 const Button = ({
-  icon,
   onClick,
   admin,
   uiData,
@@ -159,7 +187,7 @@ const Button = ({
 
 const ApartmentControls = (props) => {
   const isVisible = props.activeUI?.includes("apartment");
-  const { emitUIInteraction } = props;
+  const { emitUIInteraction, setActiveUI, activeUI } = props;
   return (
     <Container open={isVisible}>
       <Inner>
@@ -174,16 +202,42 @@ const ApartmentControls = (props) => {
                 <Name>Name</Name>
                 <Price>Price</Price>
                 <Availability>Available</Availability>
+                <FacadeName>Facade name</FacadeName>
               </NameContainer>
-              <InfoContainer>
+              {/* <InfoContainer>
                 <Frontage>Lot frontage: 10m2</Frontage>
                 <Depth>Lot depth: 10m2</Depth>
-              </InfoContainer>
+              </InfoContainer> */}
             </Details>
             <Stats>
-              <Stat icon={<FaBed size={30} />}>4 bed</Stat>
-              <Stat icon={<FaBath size={30} />}>2 bath</Stat>
-              <Stat icon={<IoResize size={30} />}>180 m2</Stat>
+              <Stat {...props} name="BedStat" icon={<FaBed size={30} />}>
+                4 bed
+              </Stat>
+              <Stat {...props} name="BathStat" icon={<FaBath size={30} />}>
+                2 bath
+              </Stat>
+              <Stat {...props} name="SurfaceStat" icon={<IoResize size={30} />}>
+                180 m2
+              </Stat>
+              <Stat
+                {...props}
+                name="FrontageStat"
+                icon={<TbViewportWide size={30} />}
+              >
+                23 m
+              </Stat>
+              <Stat
+                {...props}
+                name="DepthStat"
+                icon={
+                  <TbViewportWide
+                    size={30}
+                    style={{ transform: "rotate(90deg)" }}
+                  />
+                }
+              >
+                6 m
+              </Stat>
             </Stats>
           </Top>
           <Bottom
@@ -193,14 +247,14 @@ const ApartmentControls = (props) => {
           >
             <Button
               {...props}
-              icon={<EyeOutlined />}
+              icon={<FaHouseUser />}
               onClick={() => emitUIInteraction?.({ TDTour: true })}
               label="3D Tour"
               name="TDTour"
             ></Button>
             <Button
               {...props}
-              icon={<EyeOutlined />}
+              icon={<FaHouseUser />}
               onClick={() => emitUIInteraction?.({ VTour: true })}
               label="Virtual tour"
               name="VTour"
@@ -208,9 +262,18 @@ const ApartmentControls = (props) => {
             <Button
               {...props}
               icon={<EyeOutlined />}
-              onClick={() => emitUIInteraction?.({ FloorPlan: true })}
+              onClick={() => setActiveUI([...activeUI, "floorPlan"])}
               label="Floor plan"
               name="FloorPlan"
+            ></Button>
+            <Button
+              {...props}
+              icon={<MdOtherHouses />}
+              onClick={() =>
+                window.open("https://www.realestate.com.au", "_blank").focus()
+              }
+              label="Property info"
+              name="PropertyInfo"
             ></Button>
           </Bottom>
         </Inner2>

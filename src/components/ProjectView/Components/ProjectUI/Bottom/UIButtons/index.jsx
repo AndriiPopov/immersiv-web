@@ -158,9 +158,13 @@ const UIButtons = (props) => {
           title="level"
           icon={<BsChevronExpand />}
           onClick={() => {
+            emitUIInteraction?.({ Teleport: true });
             setActiveUI([activeUI[0], "location"]);
           }}
-          onUnclick={() => setActiveUI([activeUI[0]])}
+          onUnclick={() => {
+            setActiveUI([activeUI[0]]);
+            emitUIInteraction?.({ Teleport: true });
+          }}
           visible={["exterior", "interior"]}
           name="location"
         />
@@ -174,7 +178,7 @@ const UIButtons = (props) => {
           }}
           onUnclick={() => setActiveUI([activeUI[0]])}
           visible={["exterior", "interior"]}
-          name="location"
+          name="rooms"
         />
 
         <ButtonUI

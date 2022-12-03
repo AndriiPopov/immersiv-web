@@ -12,6 +12,7 @@ import { QuestionOutlined } from "@ant-design/icons";
 import { BsQuestionLg } from "react-icons/bs";
 import { InfoButton } from "../Bottom/InfoButton";
 import { RoomsControls } from "../Bottom/RoomsControls";
+import FloorPlan from "../Bottom/FloorPlan";
 
 const Container = styled.div`
   position: fixed;
@@ -70,6 +71,7 @@ const AppUI = (props) => {
       </Container>
       <FilterControls {...propsC} />
       <Gallery {...propsC} />
+      <FloorPlan {...propsC} />
       <SunControls {...propsC} />
       <LocationControls {...propsC} />
       <RoomsControls {...propsC} />

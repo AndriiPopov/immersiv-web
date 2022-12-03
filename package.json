@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "@arcware/webrtc-plugin": "^0.2.8",
+    "@arcware/webrtc-plugin": "^0.3.0",
     "@monkeyway/streaming-control-lib": "file:monkeyway-streaming-control-lib-0.14.0.tgz",
     "@monkeyway/streaming-lib": "file:monkeyway-streaming-lib-2.21.0.tgz",
     "@pureweb/platform-sdk": "^3.11.3",
@@ -33,6 +33,7 @@
     "react-helmet-async": "^1.0.7",
     "react-hot-toast": "^1.0.1",
     "react-icons": "^4.6.0",
+    "react-iframe": "^1.8.5",
     "react-image-gallery": "^1.2.9",
     "react-router-dom": "^6.2.2",
     "react-scripts": "4.0.1",

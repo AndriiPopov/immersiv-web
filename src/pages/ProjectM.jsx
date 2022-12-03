@@ -108,7 +108,7 @@ const ProjectM = (props) => {
         <Video
           ref={streamRef}
           tabindex="0"
-          playsinline
+          playsInline
           oncontextmenu="return false;"
         />
 

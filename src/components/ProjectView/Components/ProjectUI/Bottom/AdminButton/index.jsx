@@ -6,7 +6,9 @@ import styled from "styled-components";
 const MoreButton = styled(Button)`
   position: absolute;
   top: 0px;
-  ${(props) => (props.adminSide === "left" ? "left: -25px;" : "right: -25px;")}
+
+  ${(props) => (props.adminSide === "left" ? "left: -15px;" : "right: -15px;")}
+  z-index: 1;
 `;
 
 const Overlay = styled.div`

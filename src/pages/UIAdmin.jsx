@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 import LayoutHOC from "layout/Layout";
-import { Button, Checkbox, Form, Layout, PageHeader } from "antd";
+import { Button, Checkbox, Form, Input, Layout, PageHeader } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import projectService from "services/project.service";
 import useLoginCheck from "hooks/useLoginCheck";
@@ -127,10 +127,10 @@ const UIAdmin = (props) => {
               >
                 <ChromePicker disableAlpha />
               </Form.Item>
-
               <Form.Item label="Rooms" name="rooms">
                 <CodeMirror height="200px" />
               </Form.Item>
+
               <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type="primary" htmlType="submit">
                   Save

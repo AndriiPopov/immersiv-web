@@ -13,8 +13,7 @@ const Container = styled.div`
 `;
 
 const Inner = styled.div`
-  display: flex;
-  flex: 1;
+  display: flexbox;
   overflow-x: auto;
   justify-content: center;
 `;
